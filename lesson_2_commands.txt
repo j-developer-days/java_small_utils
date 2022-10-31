@@ -1,0 +1,14 @@
+Generate key with specific type -t 
+ssh-keygen -t ed25519 -C "jdev_key_31.10.2022" -f ./jdev_key_31.10.2022
+
+generate key rsa
+ssh-keygen -C "jdev_key_31.10.2022" -f ./jdev_key_31.10.2022_2
+
+echo ""run ssh agent
+eval $(ssh-agent)
+
+echo "*****run ssh agent-----"
+ssh-add ~/projects/ssh_keys/key_090921
+
+echo "check key status"
+ssh -T git@github.com
