@@ -3,3 +3,8 @@ Host *
   AddKeysToAgent yes
   IdentityFile /home/java_dev/projects/github/jdev_rsa_31.10.2022
 
+if we want to specific site of repository(github, bitbucket)
+Host *.github.com
+  AddKeysToAgent yes
+  IdentityFile /home/java_dev/projects/github/jdev_rsa_31.10.2022
+
