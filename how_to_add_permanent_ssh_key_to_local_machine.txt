@@ -1,0 +1,5 @@
+we need to create in home directory .ssh/config file and here is content of that file
+Host *
+  AddKeysToAgent yes
+  IdentityFile /home/java_dev/projects/github/jdev_rsa_31.10.2022
+
