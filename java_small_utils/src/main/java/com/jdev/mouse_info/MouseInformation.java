@@ -1,0 +1,109 @@
+package com.jdev.mouse_info;
+
+import com.jdev.utils.ConsoleUtil;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.awt.image.MultiResolutionImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
+
+public class MouseInformation {
+
+    private static final Random RANDOM = new Random();
+
+    public static void main(String[] args) throws AWTException, InterruptedException, IOException {
+//        getToolkitInfo();
+
+//        robotInfo();
+
+        mouseAutoMoveByTimer();
+    }
+
+    private static void mouseAutoMoveByTimer() throws AWTException {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        Robot robot = new Robot();
+        while (true){
+           int x =  RANDOM.nextInt((int)screenSize.getWidth());
+           int y =  RANDOM.nextInt((int)screenSize.getHeight());
+
+            System.out.println("X = " + x + "\ty = " + y);
+            robot.mouseMove(x, y);
+            Color pixelColor = robot.getPixelColor(x, y);
+            System.out.println("color is - " + pixelColor);
+            robot.delay(4_000);
+            ConsoleUtil.printDelimiter('$');
+
+        }
+    }
+
+    private static void robotInfo() throws AWTException, InterruptedException, IOException {
+        showCurrentMouseLocation();
+        ConsoleUtil.printDelimiter('#');
+
+        Robot robot = new Robot();
+        final var x = 1_000;
+        final var y = 250;
+//        robot.mouseMove(x, y);
+
+        showCurrentMouseLocation();
+        ConsoleUtil.printDelimiter('#');
+
+        Color pixelColor = robot.getPixelColor(x, y);
+        System.out.println("color info - " + pixelColor);
+
+//        clickMouseButton(InputEvent.BUTTON1_DOWN_MASK, robot, "Button1 - left button");
+//        clickMouseButton(InputEvent.BUTTON2_DOWN_MASK, robot, "Button2 - wheel scroll middle button");
+//        clickMouseButton(InputEvent.BUTTON3_DOWN_MASK, robot, "Button3 - right button");
+
+        robot.delay(3_000);
+//        robot.mouseWheel(150);
+
+//        keyPress(KeyEvent.VK_W, robot);
+
+        screenCapture(robot, new Rectangle(0, 0, 1000, 500), "image_w1000_h500", "jpg");
+        screenCapture(robot, MouseInfo.getPointerInfo().getDevice().getDefaultConfiguration().getBounds(), "image_full", "jpg");
+
+        MultiResolutionImage multiResolutionScreenCapture = robot.createMultiResolutionScreenCapture(MouseInfo.getPointerInfo().getDevice().getDefaultConfiguration().getBounds());
+        multiResolutionScreenCapture.getResolutionVariants().forEach(image -> System.out.println(image));
+
+    }
+
+    private static void screenCapture(Robot robot, Rectangle rectangle, String name, String fileFormat) throws IOException {
+        BufferedImage screenCapture = robot.createScreenCapture(rectangle);
+        File file = new File(name + "." + fileFormat);
+        ImageIO.write(screenCapture, fileFormat, file);
+    }
+
+    private static void keyPress(int keyCode, Robot robot){
+        robot.keyPress(keyCode);
+        robot.keyRelease(keyCode);
+    }
+
+    private static void clickMouseButton(int buttonNumber, Robot robot, String buttonName) throws InterruptedException {
+        Thread.sleep(3_000);
+        robot.mousePress(buttonNumber);
+        robot.mouseRelease(buttonNumber);
+        System.out.println("Clicked - " + buttonName);
+    }
+
+    private static void showCurrentMouseLocation() {
+        Point location = MouseInfo.getPointerInfo().getLocation();
+        System.out.println("X = " + location.getX() + "\tY = " + location.getY());
+    }
+
+    private static void getToolkitInfo() {
+        System.out.println("screen resolution is - " + Toolkit.getDefaultToolkit().getScreenResolution());
+        ConsoleUtil.printDelimiter('_', 200);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        System.out.println("H = " + screenSize.getHeight());
+        System.out.println("W = " + screenSize.getWidth());
+        System.out.println("Full info - " + screenSize.getSize());
+    }
+
+}
