@@ -19,4 +19,8 @@ public class ConsoleUtil {
         printDelimiter(c, DEFAULT_COUNT);
     }
 
+    public static void logError(String message, Exception e){
+        System.out.println("ERROR: " + message + "\t exception info - " + e.getClass().getCanonicalName() + "\tmessage - " + e.getMessage());
+    }
+
 }
