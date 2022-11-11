@@ -15,7 +15,8 @@ public class ScreenShooterStarter {
         screenShooter.setFileName("Image");
         screenShooter.setStoreFolder("images");
 //        screenShooter.setPeriod("ss3");
-//        screenShooter.setDoScreenShootBefore(LocalDateTime.now().plusSeconds(5));
+        screenShooter.setDoScreenShootBefore(LocalDateTime.now().plusSeconds(5));
+        screenShooter.setDoScreenShootIfMousePositionChange(true);
 
         screenShooter.doScreenShoot();
     }

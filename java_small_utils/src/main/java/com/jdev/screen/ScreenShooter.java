@@ -74,6 +74,8 @@ public class ScreenShooter {
      */
     @Setter
     private String period;
+    @Setter
+    private boolean doScreenShootIfMousePositionChange;
 
     private long innerDelayOnStartUpMs;
     private long innerTimeOutBetweenScreenShootsMs;
@@ -97,11 +99,23 @@ public class ScreenShooter {
         System.out.println("end...");
     }
 
-    private void loopCreateAndSaveScreenShoots(Predicate<LocalDateTime> localDateTimePredicate) {
+    private void loopCreateAndSaveScreenShoots(Predicate<LocalDateTime> localDateTimePredicate){
         var countImages = 1;
+        Point mousePosition = MouseInfo.getPointerInfo().getLocation();
         while ((localDateTimePredicate != null && localDateTimePredicate.test(LocalDateTime.now())) || (countImages <= count)) {
-            createScreenShootAndSaveIt(countImages);
-            countImages++;
+            if (doScreenShootIfMousePositionChange) {
+                Point currentMousePosition = MouseInfo.getPointerInfo().getLocation();
+                if (mousePosition.equals(currentMousePosition)) {
+                    continue;
+                } else {
+                    createScreenShootAndSaveIt(countImages);
+                    countImages++;
+                    mousePosition = currentMousePosition;
+                }
+            } else {
+                createScreenShootAndSaveIt(countImages);
+                countImages++;
+            }
         }
     }
 
