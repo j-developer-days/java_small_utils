@@ -1,2 +1,6 @@
 #!/bin/bash
-rm -rfv ../Image-*.jpg
+rm -rfv ../*.jpg
+rm -rfv ../*.png
+rm -rfv ../Image-*.*
+rm -rfv ../images/*.jpg
+rm -rfv ../images/*.png
