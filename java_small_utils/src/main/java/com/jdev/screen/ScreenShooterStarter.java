@@ -8,8 +8,9 @@ public class ScreenShooterStarter {
         ScreenShooter screenShooter = new ScreenShooter();
         screenShooter.setCount(5);
         screenShooter.setSize(new Rectangle(0, 0, 1_000, 500));
-        screenShooter.setDelayOnStartUp(2);
-        screenShooter.setTimeOutBetweenScreenShoots(2);
+        screenShooter.setDelayOnStartUp(0);
+        screenShooter.setTimeOutBetweenScreenShoots(0);
+        screenShooter.setFileFormat("bmp");
 
         screenShooter.doScreenShoot();
     }
