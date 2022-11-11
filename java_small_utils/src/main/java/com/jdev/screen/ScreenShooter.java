@@ -16,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 public class ScreenShooter {
 
     private static final String DEFAULT_FILE_FORMAT = "jpg";
+    private static final String DEFAULT_FILE_NAME = "Image";
+
     private static Robot robot;
 
     static {
@@ -38,6 +40,11 @@ public class ScreenShooter {
      */
     @Setter
     private String fileFormat = DEFAULT_FILE_FORMAT;
+    /**
+     * <p>file name by default should be, by example - <b>Image_09.11.2022 15:25:40_1.jpg</b></p>
+     */
+    @Setter
+    private String fileName = DEFAULT_FILE_NAME;
     @Setter
     private long delayOnStartUp;
     @Setter
@@ -86,7 +93,13 @@ public class ScreenShooter {
 
     private void createAndSaveScreenShoot(int imageNumber) {
         BufferedImage imageForSave = robot.createScreenCapture(size);
-        File file = new File("Image-" + DateUtil.getLocalDateTimeAsText() + "_" + imageNumber + "." + fileFormat);
+
+        String finalFileName = fileName + "_";
+        if (DEFAULT_FILE_NAME.equals(this.fileName)) {
+            finalFileName = finalFileName + DateUtil.getLocalDateTimeNowAsText(DateUtil.DEFAULT_DATE_TIME_FORMAT_AS_TEXT) + "_";
+        }
+        finalFileName += imageNumber;
+        File file = new File(finalFileName + "." + fileFormat);
 
         try {
             ImageIO.write(imageForSave, fileFormat, file);
