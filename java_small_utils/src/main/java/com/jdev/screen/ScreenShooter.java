@@ -10,7 +10,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 @NoArgsConstructor
 public class ScreenShooter {
@@ -54,10 +56,28 @@ public class ScreenShooter {
      */
     @Setter
     private String storeFolder;
+    /**
+     * <p>do screen shoot before indicated date time</p>
+     */
+    @Setter
+    private LocalDateTime doScreenShootBefore;
+    /**
+     * <p>do screen shoot current time + indicated period</p>
+     * <p>ss = seconds = ss100 = 100 seconds
+     * mm = minutes = mm10 = 10 minutes
+     * HH = hours
+     * dd = days
+     * MM = months
+     * yy = years = yy1 = 1 year
+     * </p>
+     * {@link ScreenShooter#finishForPeriod}
+     */
+    @Setter
+    private String period;
 
-    private int innerCount;
     private long innerDelayOnStartUpMs;
     private long innerTimeOutBetweenScreenShootsMs;
+    private LocalDateTime finishForPeriod;
 
     public void doScreenShoot() {
         System.out.println("begin...");
@@ -66,15 +86,34 @@ public class ScreenShooter {
         convert();
         timeOut(innerDelayOnStartUpMs);
 
-        for (var i = 1; i <= innerCount; i++) {
-            createAndSaveScreenShoot(i);
+        if (finishForPeriod != null) {
+            loopCreateAndSaveScreenShoots(localDateTime -> finishForPeriod.isAfter(localDateTime));
+        } else if (doScreenShootBefore != null) {
+            loopCreateAndSaveScreenShoots(localDateTime -> doScreenShootBefore.isAfter(localDateTime));
+        } else {
+            loopCreateAndSaveScreenShoots(null);
         }
 
         System.out.println("end...");
     }
 
+    private void loopCreateAndSaveScreenShoots(Predicate<LocalDateTime> localDateTimePredicate) {
+        var countImages = 1;
+        while ((localDateTimePredicate != null && localDateTimePredicate.test(LocalDateTime.now())) || (countImages <= count)) {
+            createScreenShootAndSaveIt(countImages);
+            countImages++;
+        }
+    }
+
     private void validation() {
-        innerCount = count <= 0 ? 1 : count;
+        if ((count > 0 && doScreenShootBefore != null && period != null) ||
+                !(count > 0 ^ doScreenShootBefore != null ^ period != null))
+        {
+            throw new RuntimeException(
+                    "Should be chose only one of option: \n1)count = '" + count + "'" + "\n2)doScreenShootBefore = '" +
+                            doScreenShootBefore + "'\n3)period = '" + period + "'");
+        }
+
         if (size == null) {
             size = MouseInfo.getPointerInfo().getDevice().getDefaultConfiguration().getBounds();
         }
@@ -83,6 +122,44 @@ public class ScreenShooter {
     private void convert() {
         innerDelayOnStartUpMs = TimeUnit.SECONDS.toMillis(delayOnStartUp);
         innerTimeOutBetweenScreenShootsMs = TimeUnit.SECONDS.toMillis(timeOutBetweenScreenShoots);
+        convertPeriod();
+    }
+
+    private void convertPeriod() {
+        if (period != null && !period.isBlank()) {
+            LocalDateTime now = LocalDateTime.now();
+            final String periodDefinition = period.substring(0, 2);
+            final long count = Long.valueOf(period.substring(2));
+            switch (periodDefinition) {
+                case "ss": {
+                    finishForPeriod = now.plusSeconds(count);
+                    break;
+                }
+                case "mm": {
+                    finishForPeriod = now.plusMinutes(count);
+                    break;
+                }
+                case "HH": {
+                    finishForPeriod = now.plusHours(count);
+                    break;
+                }
+                case "dd": {
+                    finishForPeriod = now.plusDays(count);
+                    break;
+                }
+                case "MM": {
+                    finishForPeriod = now.plusMonths(count);
+                    break;
+                }
+                case "yy": {
+                    finishForPeriod = now.plusYears(count);
+                    break;
+                }
+                default: {
+                    throw new RuntimeException("Not right parameter - [" + periodDefinition + "]");
+                }
+            }
+        }
     }
 
     private void timeOut(long ms) {
@@ -96,14 +173,15 @@ public class ScreenShooter {
         }
     }
 
-    private void createAndSaveScreenShoot(int imageNumber) {
-        BufferedImage imageForSave = robot.createScreenCapture(size);
-
+    private void createScreenShootAndSaveIt(int countImages) {
+        BufferedImage screenCapture = robot.createScreenCapture(size);
         String finalFileName = fileName + "_";
         if (DEFAULT_FILE_NAME.equals(this.fileName)) {
             finalFileName = finalFileName + DateUtil.getLocalDateTimeNowAsText(DateUtil.DEFAULT_DATE_TIME_FORMAT_AS_TEXT) + "_";
         }
-        finalFileName += imageNumber;
+
+        finalFileName += countImages;
+
         File outputFile;
         if (storeFolder == null) {
             outputFile = new File(finalFileName + "." + fileFormat);
@@ -112,12 +190,12 @@ public class ScreenShooter {
         }
 
         try {
-            ImageIO.write(imageForSave, fileFormat, outputFile);
+            ImageIO.write(screenCapture, fileFormat, outputFile);
         } catch (IOException e) {
             ConsoleUtil.logError("Write image", e);
         }
-        System.out.println("#" + imageNumber + "\tfileName - " + outputFile.getAbsolutePath());
-        if ((count > 0 && imageNumber != count) || count <= 0) {
+        System.out.println("# " + countImages + "\tfilename - " + outputFile.getAbsolutePath());
+        if ((count > 0 && countImages != count) || count <= 0) {
             timeOut(innerTimeOutBetweenScreenShootsMs);
         }
     }
