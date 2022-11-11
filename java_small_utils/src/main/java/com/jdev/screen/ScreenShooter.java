@@ -49,6 +49,11 @@ public class ScreenShooter {
     private long delayOnStartUp;
     @Setter
     private long timeOutBetweenScreenShoots;
+    /**
+     * <p>store folder path</p>
+     */
+    @Setter
+    private String storeFolder;
 
     private int innerCount;
     private long innerDelayOnStartUpMs;
@@ -99,15 +104,22 @@ public class ScreenShooter {
             finalFileName = finalFileName + DateUtil.getLocalDateTimeNowAsText(DateUtil.DEFAULT_DATE_TIME_FORMAT_AS_TEXT) + "_";
         }
         finalFileName += imageNumber;
-        File file = new File(finalFileName + "." + fileFormat);
+        File outputFile;
+        if (storeFolder == null) {
+            outputFile = new File(finalFileName + "." + fileFormat);
+        } else {
+            outputFile = new File(storeFolder, finalFileName + "." + fileFormat);
+        }
 
         try {
-            ImageIO.write(imageForSave, fileFormat, file);
+            ImageIO.write(imageForSave, fileFormat, outputFile);
         } catch (IOException e) {
             ConsoleUtil.logError("Write image", e);
         }
-        System.out.println("#" + imageNumber + "\tfileName - " + file.getAbsolutePath());
-        timeOut(innerTimeOutBetweenScreenShootsMs);
+        System.out.println("#" + imageNumber + "\tfileName - " + outputFile.getAbsolutePath());
+        if ((count > 0 && imageNumber != count) || count <= 0) {
+            timeOut(innerTimeOutBetweenScreenShootsMs);
+        }
     }
 
 }
