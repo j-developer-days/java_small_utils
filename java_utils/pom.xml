@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.jdev</groupId>
+        <artifactId>jdev_maven_parent</artifactId>
+        <version>1.0-14.11.2022</version>
+    </parent>
+
+    <groupId>com.jdev</groupId>
+    <artifactId>java_utils</artifactId>
+    <version>1.0-16.11.2022</version>
+    <packaging>pom</packaging>
+
+    <name>java_utils(root)</name>
+    <modules>
+        <module>common_utils</module>
+        <module>useful_utils</module>
+        <module>useful_utils/screen_shoot_util</module>
+    </modules>
+
+    <properties></properties>
+
+    <dependencies></dependencies>
+
+    <build>
+        <finalName>java_utils</finalName>
+    </build>
+</project>
