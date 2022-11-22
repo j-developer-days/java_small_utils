@@ -1,10 +1,9 @@
 package com.jdev.mouse_info;
 
-import com.jdev.utils.ConsoleUtil;
+import com.jdev.util.ConsoleUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.MultiResolutionImage;
 import java.io.File;
@@ -36,14 +35,14 @@ public class MouseInformation {
             Color pixelColor = robot.getPixelColor(x, y);
             System.out.println("color is - " + pixelColor);
             robot.delay(4_000);
-            ConsoleUtil.printDelimiter('$');
+            ConsoleUtils.printDelimiter('$');
 
         }
     }
 
     private static void robotInfo() throws AWTException, InterruptedException, IOException {
         showCurrentMouseLocation();
-        ConsoleUtil.printDelimiter('#');
+        ConsoleUtils.printDelimiter('#');
 
         Robot robot = new Robot();
         final var x = 1_000;
@@ -51,7 +50,7 @@ public class MouseInformation {
 //        robot.mouseMove(x, y);
 
         showCurrentMouseLocation();
-        ConsoleUtil.printDelimiter('#');
+        ConsoleUtils.printDelimiter('#');
 
         Color pixelColor = robot.getPixelColor(x, y);
         System.out.println("color info - " + pixelColor);
@@ -98,7 +97,7 @@ public class MouseInformation {
 
     private static void getToolkitInfo() {
         System.out.println("screen resolution is - " + Toolkit.getDefaultToolkit().getScreenResolution());
-        ConsoleUtil.printDelimiter('_', 200);
+        ConsoleUtils.printDelimiter('_', 200);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         System.out.println("H = " + screenSize.getHeight());

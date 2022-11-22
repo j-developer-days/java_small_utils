@@ -1,7 +1,7 @@
 package com.jdev.screen;
 
-import com.jdev.util.ConsoleUtil;
-import com.jdev.util.DateUtil;
+import com.jdev.util.ConsoleUtils;
+import com.jdev.util.DateUtils;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -26,7 +26,7 @@ public class ScreenShooter {
         try {
             robot = new Robot();
         } catch (AWTException e) {
-            ConsoleUtil.logError("Init robot class", e);
+            ConsoleUtils.logError("Init robot class", e);
         }
     }
 
@@ -183,7 +183,7 @@ public class ScreenShooter {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-            ConsoleUtil.logError("Thread sleep", e);
+            ConsoleUtils.logError("Thread sleep", e);
         }
     }
 
@@ -191,7 +191,7 @@ public class ScreenShooter {
         BufferedImage screenCapture = robot.createScreenCapture(size);
         String finalFileName = fileName + "_";
         if (DEFAULT_FILE_NAME.equals(this.fileName)) {
-            finalFileName = finalFileName + DateUtil.getLocalDateTimeNowAsText(DateUtil.DEFAULT_DATE_TIME_FORMAT_AS_TEXT) + "_";
+            finalFileName = finalFileName + DateUtils.getLocalDateTimeNowAsText(DateUtils.DEFAULT_DATE_TIME_FORMAT_AS_TEXT) + "_";
         }
 
         finalFileName += countImages;
@@ -206,7 +206,7 @@ public class ScreenShooter {
         try {
             ImageIO.write(screenCapture, fileFormat, outputFile);
         } catch (IOException e) {
-            ConsoleUtil.logError("Write image", e);
+            ConsoleUtils.logError("Write image", e);
         }
         System.out.println("# " + countImages + "\tfilename - " + outputFile.getAbsolutePath());
         if ((count > 0 && countImages != count) || count <= 0) {

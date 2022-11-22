@@ -1,6 +1,6 @@
 package com.jdev.mouse_info;
 
-import com.jdev.utils.ConsoleUtil;
+import com.jdev.util.ConsoleUtils;
 
 import java.awt.*;
 import java.awt.image.ColorModel;
@@ -12,7 +12,7 @@ public class MouseInfoDemo {
 
     public static void main(String[] args) throws InterruptedException {
 //        showMouseInfo();
-//        ConsoleUtil.printDelimiter('!', 250);
+//        ConsoleUtils.printDelimiter('!', 250);
 
 //        showCoordinate();
         getMouseCoordinateByInterval();
@@ -57,25 +57,25 @@ public class MouseInfoDemo {
 
     private static void showMouseInfo() {
         System.out.println("get number of button on the mouse - " + MouseInfo.getNumberOfButtons());
-        ConsoleUtil.printDelimiter('*', 100);
+        ConsoleUtils.printDelimiter('*', 100);
 
         Point pointLocation = MouseInfo.getPointerInfo().getLocation();
         System.out.println("X = " + pointLocation.getX() + "\tY = " + pointLocation.getY());
-        ConsoleUtil.printDelimiter('-');
+        ConsoleUtils.printDelimiter('-');
 
         System.out.println("get mouse info device configuration count - " + MouseInfo.getPointerInfo().getDevice().getConfigurations().length);
-        ConsoleUtil.printDelimiter('$');
+        ConsoleUtils.printDelimiter('$');
 
         GraphicsConfiguration defaultConfiguration = MouseInfo.getPointerInfo().getDevice().getDefaultConfiguration();
         Rectangle bounds = defaultConfiguration.getBounds();
         showRectangle(bounds);
-        ConsoleUtil.printDelimiter('-', 50);
+        ConsoleUtils.printDelimiter('-', 50);
 
         ColorModel colorModel = defaultConfiguration.getColorModel();
         System.out.println("colorModel - " + colorModel);
         final var pixel = 100;
         System.out.println("red - " + colorModel.getRed(pixel) + "\tgreen - " + colorModel.getGreen(pixel) + "\tblue - " + colorModel.getBlue(pixel));
-        ConsoleUtil.printDelimiter('|', 50);
+        ConsoleUtils.printDelimiter('|', 50);
 
         System.out.println("color model num components = " + colorModel.getNumComponents());
         System.out.print("color model transparency = " + colorModel.getTransparency() + "\t");

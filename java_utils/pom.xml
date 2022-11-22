@@ -16,6 +16,7 @@
     <name>java_utils(root)</name>
     <modules>
         <module>common_utils</module>
+        <module>demonstrations</module>
         <module>useful_utils</module>
         <module>useful_utils/screen_shoot_util</module>
     </modules>

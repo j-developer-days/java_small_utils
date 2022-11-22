@@ -1,6 +1,6 @@
 package com.jdev.util;
 
-public class ConsoleUtil {
+public class ConsoleUtils {
 
     private static final int DEFAULT_COUNT = 150;
 
