@@ -2,25 +2,24 @@ package com.jdev.util;
 
 public class ConsoleUtils {
 
-    private static final int DEFAULT_COUNT = 150;
-
-    public static void printDelimiter(char c, int count){
-        if(count <= 0){
-            count = DEFAULT_COUNT;
-        }
-        StringBuilder result = new StringBuilder(count);
-        for (var i = 0; i < count; i++){
-            result.append(c);
-        }
-        System.out.println(result);
+    public static void printDelimiter(char c, int count) {
+        printToConsole(StringUtils.multipleCharByCount(c, count));
     }
 
-    public static void printDelimiter(char c){
-        printDelimiter(c, DEFAULT_COUNT);
+    public static void printDelimiter(char c) {
+        printDelimiter(c, -1);
     }
 
-    public static void logError(String message, Exception e){
-        System.out.println("ERROR: " + message + "\t exception info - " + e.getClass().getCanonicalName() + "\tmessage - " + e.getMessage());
+    public static void printDelimiter() {
+        printDelimiter('*', -1);
+    }
+
+    public static void logError(String message, Exception e) {
+        printToConsole("ERROR: " + message + "\t exception info - " + e.getClass().getCanonicalName() + "\tmessage - " + e.getMessage());
+    }
+
+    public static void printToConsole(Object o) {
+        System.out.println(o);
     }
 
 }

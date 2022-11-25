@@ -1,7 +1,9 @@
 package com.jdev.logger;
 
 import com.jdev.file.PropertiesFileUtils;
+import com.jdev.util.ConsoleUtils;
 import com.jdev.util.DateUtils;
+import com.jdev.util.StringUtils;
 import lombok.NoArgsConstructor;
 
 import java.util.Properties;
@@ -10,7 +12,7 @@ import java.util.Properties;
 public class ConsoleLogger {
 
     private static final String DEFAULT_CONFIG_FILE_NAME = "logger.properties";
-    private static final String BEGIN_AND_END = "*****";
+    private static final String BEGIN_AND_END = StringUtils.multipleCharByCount('*', 9);
 
     private static Properties properties;
 
@@ -70,20 +72,22 @@ public class ConsoleLogger {
             loggerLevelFromPropertiesFile = LoggerLevel.valueOf(loggerLevelAsString);
         } catch (IllegalArgumentException e) {
             loggerLevelFromPropertiesFile = LoggerLevel.OFF;
+            ConsoleUtils.logError("Not right logger level value from properties file, current is - '" + loggerLevelAsString + "'", e);
         }
 
         if (loggerLevel.canLog(loggerLevelFromPropertiesFile)) {
-            System.out.println(new StringBuilder(BEGIN_AND_END).append(" ").append("DATE TIME - ")
+            System.out.println(new StringBuilder(BEGIN_AND_END).append(StringUtils.SPACE).append("DATE TIME - ")
                     .append(DateUtils.getLocalDateTimeNowAsText())
-                    .append("\t").append("THREAD [").append(Thread.currentThread().getName()).append("]")
-                    .append("\t").append(loggerLevel.name()).append(": ").append(message).append(" ")
+                    .append(StringUtils.TAB).append("THREAD [").append(Thread.currentThread().getName()).append("]")
+                    .append(StringUtils.TAB).append(loggerLevel.name()).append(StringUtils.COLON).append(StringUtils.SPACE)
+                    .append(message).append(StringUtils.SPACE)
                     .append(BEGIN_AND_END));
         }
 
     }
 
     private String errorLog(String message, Exception e) {
-        return new StringBuilder(message).append("EXCEPTION INFO - ").append("'").append(e.getClass().getCanonicalName())
-                .append("\tMESSAGE - ").append(e.getMessage()).append("'").toString();
+        return new StringBuilder(message).append("EXCEPTION INFO - ").append(StringUtils.APOSTROPHE).append(e.getClass().getCanonicalName())
+                .append(StringUtils.TAB).append("MESSAGE - ").append(e.getMessage()).append(StringUtils.APOSTROPHE).toString();
     }
 }
