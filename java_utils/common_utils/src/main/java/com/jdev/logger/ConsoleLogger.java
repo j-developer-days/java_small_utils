@@ -30,7 +30,7 @@ public class ConsoleLogger {
         setPropertiesFilePath(null);
     }
 
-    private static void setPropertiesFilePath(String path) {
+    public static void setPropertiesFilePath(String path) {
         if (path == null) {
             properties = PropertiesFileUtils.readFromPropertiesFile(ConsoleLogger.class.getClassLoader().getResource("./" + DEFAULT_CONFIG_FILE_NAME).getFile());
         } else {
