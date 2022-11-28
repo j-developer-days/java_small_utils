@@ -86,6 +86,36 @@ class ConsoleLoggerTest {
        }
    }
 
+    @Order(3)
+    @Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class ConsoleLoggerTestLoggerStartWithContainsEndWithAndSpringStyle{
+        @Order(1)
+        @Test
+        void test_logger_start_with() {
+            setAnotherFilePath("logger_start_with.properties");
+            log("test_logger_start_with");
+        }
+        @Order(2)
+        @Test
+        void test_logger_end_with() {
+            setAnotherFilePath("logger_end_with.properties");
+            log("test_logger_end_with");
+        }
+        @Order(3)
+        @Test
+        void test_logger_contains() {
+            setAnotherFilePath("logger_contains.properties");
+            log("test_logger_contains");
+        }
+        @Order(4)
+        @Test
+        void test_logger_spring_style() {
+            setAnotherFilePath("logger_spring_style.properties");
+            log("test_logger_spring_style");
+        }
+    }
+
 
 
 

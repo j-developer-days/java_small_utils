@@ -6,6 +6,9 @@ import com.jdev.util.DateUtils;
 import com.jdev.util.StringUtils;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 @NoArgsConstructor
@@ -13,6 +16,7 @@ public class ConsoleLogger {
 
     private static final String DEFAULT_CONFIG_FILE_NAME = "logger.properties";
     private static final String BEGIN_AND_END = StringUtils.multipleCharByCount('*', 9);
+    private static Map<String, LoggerLevel> definedLogger;
 
     private static Properties properties;
 
@@ -35,6 +39,9 @@ public class ConsoleLogger {
             properties = PropertiesFileUtils.readFromPropertiesFile(ConsoleLogger.class.getClassLoader().getResource("./" + DEFAULT_CONFIG_FILE_NAME).getFile());
         } else {
             properties = PropertiesFileUtils.readFromPropertiesFile(path);
+        }
+        if (properties != null && !properties.isEmpty()) {
+            definedLogger = new HashMap<>(properties.size());
         }
     }
 
@@ -63,19 +70,36 @@ public class ConsoleLogger {
     }
 
     private void createLog(LoggerLevel loggerLevel, String message) {
-        String loggerLevelAsString = properties.getProperty(canonicalClassName);
-        if (loggerLevelAsString == null) {
-            loggerLevelAsString = LoggerLevel.OFF.name();
-        }
-        LoggerLevel loggerLevelFromPropertiesFile;
-        try {
-            loggerLevelFromPropertiesFile = LoggerLevel.valueOf(loggerLevelAsString);
-        } catch (IllegalArgumentException e) {
-            loggerLevelFromPropertiesFile = LoggerLevel.OFF;
-            ConsoleUtils.logError("Not right logger level value from properties file, current is - '" + loggerLevelAsString + "'", e);
+        LoggerLevel loggerLevelAlreadyDefined = definedLogger.get(canonicalClassName);
+        if (loggerLevelAlreadyDefined == null) {
+            String loggerLevelAsString = properties.getProperty(canonicalClassName);
+            if (loggerLevelAsString == null) {
+                Optional<String> firstFind = properties.keySet().stream().map(Object::toString).filter(key -> canonicalClassName.startsWith(key)
+                        || canonicalClassName.contains(key) || canonicalClassName.endsWith(key)).findFirst();
+                if (firstFind.isEmpty()) {
+                    String[] split = canonicalClassName.split("[.]");
+                    StringBuilder result = new StringBuilder(canonicalClassName.length() / 2);
+                    for (var i = 0; i < split.length - 1; i++) {
+                        result.append(split[i].charAt(0)).append(".");
+                    }
+                    result.append(split[split.length - 1]);
+
+                    loggerLevelAsString = properties.getProperty(result.toString());
+                } else {
+                    loggerLevelAsString = properties.getProperty(firstFind.get());
+                }
+            }
+            try {
+                loggerLevelAlreadyDefined = loggerLevelAsString == null ? LoggerLevel.OFF : LoggerLevel.valueOf(loggerLevelAsString.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                loggerLevelAlreadyDefined = LoggerLevel.OFF;
+                ConsoleUtils.logError("Not right logger level value from properties file, current is - '" + loggerLevelAsString + "'", e);
+            }
+            definedLogger.put(canonicalClassName, loggerLevelAlreadyDefined);
         }
 
-        if (loggerLevel.canLog(loggerLevelFromPropertiesFile)) {
+
+        if (loggerLevel.canLog(loggerLevelAlreadyDefined)) {
             System.out.println(new StringBuilder(BEGIN_AND_END).append(StringUtils.SPACE).append("DATE TIME - ")
                     .append(DateUtils.getLocalDateTimeNowAsText())
                     .append(StringUtils.TAB).append("THREAD [").append(Thread.currentThread().getName()).append("]")
