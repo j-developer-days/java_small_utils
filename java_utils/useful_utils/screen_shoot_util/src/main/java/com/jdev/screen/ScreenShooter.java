@@ -1,6 +1,6 @@
 package com.jdev.screen;
 
-import com.jdev.util.ConsoleUtils;
+import com.jdev.logger.ConsoleLogger;
 import com.jdev.util.DateUtils;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +17,8 @@ import java.util.function.Predicate;
 @NoArgsConstructor
 public class ScreenShooter {
 
+    private static final ConsoleLogger CONSOLE_LOGGER = new ConsoleLogger(ScreenShooter.class);
+
     private static final String DEFAULT_FILE_FORMAT = "jpg";
     private static final String DEFAULT_FILE_NAME = "Image";
 
@@ -26,7 +28,7 @@ public class ScreenShooter {
         try {
             robot = new Robot();
         } catch (AWTException e) {
-            ConsoleUtils.logError("Init robot class", e);
+            CONSOLE_LOGGER.error("Init robot class", e);
         }
     }
 
@@ -82,7 +84,7 @@ public class ScreenShooter {
     private LocalDateTime finishForPeriod;
 
     public void doScreenShoot() {
-        System.out.println("begin...");
+        CONSOLE_LOGGER.info("begin...");
 
         validation();
         convert();
@@ -96,7 +98,7 @@ public class ScreenShooter {
             loopCreateAndSaveScreenShoots(null);
         }
 
-        System.out.println("end...");
+        CONSOLE_LOGGER.info("end...");
     }
 
     private void loopCreateAndSaveScreenShoots(Predicate<LocalDateTime> localDateTimePredicate){
@@ -183,7 +185,7 @@ public class ScreenShooter {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-            ConsoleUtils.logError("Thread sleep", e);
+            CONSOLE_LOGGER.error("Thread sleep", e);
         }
     }
 
@@ -206,9 +208,9 @@ public class ScreenShooter {
         try {
             ImageIO.write(screenCapture, fileFormat, outputFile);
         } catch (IOException e) {
-            ConsoleUtils.logError("Write image", e);
+            CONSOLE_LOGGER.error("Write image", e);
         }
-        System.out.println("# " + countImages + "\tfilename - " + outputFile.getAbsolutePath());
+        CONSOLE_LOGGER.info("# {}\tfilename - {}", countImages, outputFile.getAbsolutePath());
         if ((count > 0 && countImages != count) || count <= 0) {
             timeOut(innerTimeOutBetweenScreenShootsMs);
         }

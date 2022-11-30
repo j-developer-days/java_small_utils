@@ -60,6 +60,27 @@ class ConsoleLoggerTest {
             setAnotherFilePath("logger_trace.properties");
             log("test_trace");
         }
+
+        @Order(7)
+        @Test
+        void test_trace_withParams() {
+            setAnotherFilePath("logger_trace.properties");
+            CONSOLE_LOGGER.trace("This is error message, param count = {} and second placeholder is {}", 10, "STRING");
+        }
+
+        @Order(8)
+        @Test
+        void test_trace_withParamsButWithoutParams() {
+            setAnotherFilePath("logger_trace.properties");
+            CONSOLE_LOGGER.trace("This is error message, param count = {} and second placeholder is {}");
+        }
+
+        @Order(9)
+        @Test
+        void test_trace_withParamsButLessPlaceholders() {
+            setAnotherFilePath("logger_trace.properties");
+            CONSOLE_LOGGER.trace("This is error message, param count = {}", 10, "STRING");
+        }
     }
 
     @Order(1)
