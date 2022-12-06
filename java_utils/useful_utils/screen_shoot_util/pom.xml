@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -36,4 +37,68 @@
     <build>
         <finalName>screen_shoot_util</finalName>
     </build>
+
+    <profiles>
+        <profile>
+            <id>execJar</id>
+            <activation>
+                <property>
+                    <name>execJar</name>
+                    <value>t</value>
+                </property>
+            </activation>
+            <build>
+                <finalName>screen_shoot_util_exec_jar</finalName>
+                <plugins>
+                    <plugin>
+                        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
+                        <!--docs - https://maven.apache.org/shared/maven-archiver/index.html-->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <classpathPrefix>libs/</classpathPrefix>
+                                    <mainClass>com.jdev.screen.ScreenShooterStarter</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.jdev</groupId>
+                                    <artifactId>common_utils</artifactId>
+                                    <version>${common_utils.version}</version>
+                                    <type>jar</type>
+                                    <!--<overWrite>true</overWrite>-->
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/libs/</outputDirectory>
+                                    <!--<destFileName>common_utils.jar</destFileName>-->
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>copy</id>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

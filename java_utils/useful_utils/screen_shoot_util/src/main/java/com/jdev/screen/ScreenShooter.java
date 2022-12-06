@@ -208,7 +208,7 @@ public class ScreenShooter {
         try {
             ImageIO.write(screenCapture, fileFormat, outputFile);
         } catch (IOException e) {
-            CONSOLE_LOGGER.error("Write image", e);
+            CONSOLE_LOGGER.error("Write image, output file - {}", e, outputFile.getAbsolutePath());
         }
         CONSOLE_LOGGER.info("# {}\tfilename - {}", countImages, outputFile.getAbsolutePath());
         if ((count > 0 && countImages != count) || count <= 0) {
