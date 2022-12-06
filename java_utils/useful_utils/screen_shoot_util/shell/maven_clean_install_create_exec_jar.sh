@@ -21,7 +21,8 @@ cp -v ../target/classes/logger.properties ../$V_EXEC_JAR
 
 rm -rfv ../$V_EXEC_JAR/libs/ &&
 cp -rv ../target/libs/ ../$V_EXEC_JAR/libs/ &&
-cp -v run_jar_file.sh ../$V_EXEC_JAR/run_jar_file.sh
+cp -v run_jar_file.sh ../$V_EXEC_JAR/run_jar_file.sh &&
+cp -v screen_shoot_setting.properties ../$V_EXEC_JAR/screen_shoot_setting.properties
 
 #sleep 2 && clear && rm -rfv ../$V_EXEC_JAR
 

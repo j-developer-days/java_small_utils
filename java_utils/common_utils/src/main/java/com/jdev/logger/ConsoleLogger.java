@@ -2,7 +2,7 @@ package com.jdev.logger;
 
 import com.jdev.file.FileResource;
 import com.jdev.file.PropertiesFileUtils;
-import com.jdev.util.ConsoleUtils;
+import com.jdev.console.ConsoleUtils;
 import com.jdev.util.DateUtils;
 import com.jdev.util.StringUtils;
 

@@ -1,4 +1,6 @@
-package com.jdev.util;
+package com.jdev.console;
+
+import com.jdev.util.StringUtils;
 
 public class ConsoleUtils {
 

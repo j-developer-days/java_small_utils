@@ -1,6 +1,8 @@
 package com.jdev.screen;
 
 import com.jdev.logger.ConsoleLogger;
+import com.jdev.screen.enums.ErrorType;
+import com.jdev.screen.exception.ScreenShootException;
 import com.jdev.util.DateUtils;
 import com.jdev.util.StringUtils;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,7 @@ public class ScreenShooter {
             robot = new Robot();
         } catch (AWTException e) {
             CONSOLE_LOGGER.error("Init robot class", e);
+            throw ScreenShootException.of(ErrorType.INIT_ROBOT_CLASS);
         }
     }
 
@@ -88,6 +91,7 @@ public class ScreenShooter {
         CONSOLE_LOGGER.info("begin...");
 
         validation();
+        showAllEnabledOptions();
         convert();
         timeOut(innerDelayOnStartUpMs);
 
@@ -125,9 +129,8 @@ public class ScreenShooter {
     private void validation() {
         if ((count > 0 && doScreenShootBefore != null && period != null) ||
                 !(count > 0 ^ doScreenShootBefore != null ^ period != null)) {
-            throw new RuntimeException(
-                    "Should be chose only one of option: \n1)count = '" + count + "'" + "\n2)doScreenShootBefore = '" +
-                            doScreenShootBefore + "'\n3)period = '" + period + "'");
+            throw ScreenShootException.of(ErrorType.CHOOSE_ONE_OF_3_OPTIONS, "Should be chose only one of option: \n1)count = '" + count + "'" + "\n2)doScreenShootBefore = '" +
+                    doScreenShootBefore + "'\n3)period = '" + period + "'");
         }
 
         if (size == null) {
@@ -172,7 +175,7 @@ public class ScreenShooter {
                     break;
                 }
                 default: {
-                    throw new RuntimeException("Not right parameter - [" + periodDefinition + "]");
+                    throw ScreenShootException.of(ErrorType.NOT_RIGHT_OPTION_FOR_PERIOD_PREFIX, "Not right parameter - [" + periodDefinition + "]");
                 }
             }
         }
@@ -186,6 +189,7 @@ public class ScreenShooter {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
             CONSOLE_LOGGER.error("Thread sleep", e);
+            throw new ScreenShootException(ErrorType.NOT_RIGHT_OPTION_FOR_PERIOD_PREFIX, "Thread sleep", e);
         }
     }
 
