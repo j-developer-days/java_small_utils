@@ -107,6 +107,35 @@ class ConsoleLoggerTest {
        }
    }
 
+    @Order(4)
+    @Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class ConsoleLoggerTestAll{
+
+        @Order(4)
+        @Test
+        void test_info_withLoggerPath() {
+            setAnotherFilePath("logger_info.properties");
+            log("test_info_withLoggerPath");
+        }
+
+        @Order(5)
+        @Test
+        void test_error_withConsoleLoggerPathProperty() {
+            System.setProperty("console.logger.path", "src/test/resources/logger_error.properties");
+            ConsoleLogger.setPropertiesFilePath(null);
+            log("test_error_withConsoleLoggerPathProperty");
+        }
+
+        @Order(6)
+        @Test
+        void test_error_withConsoleLoggerPath() {
+            ConsoleLogger.setPropertiesFilePath(null);
+            log("test_error_withConsoleLoggerPath");
+        }
+
+    }
+
     @Order(3)
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -136,9 +165,6 @@ class ConsoleLoggerTest {
             log("test_logger_spring_style");
         }
     }
-
-
-
 
     private void setAnotherFilePath(String file) {
         ConsoleLogger.setPropertiesFilePath(ConsoleLogger.class.getClassLoader().getResource("./" + file).getFile());

@@ -1,5 +1,7 @@
 package com.jdev.file;
 
+import com.jdev.util.ConsoleUtils;
+
 import java.io.*;
 import java.util.Properties;
 
@@ -9,7 +11,7 @@ public class PropertiesFileUtils {
         try (OutputStream outputStream = new FileOutputStream(filePath)) {
             properties.store(outputStream, comment);
         } catch (IOException e) {
-            e.printStackTrace();
+            ConsoleUtils.logError("exception when write to properties file", e);
         }
     }
 
@@ -18,11 +20,15 @@ public class PropertiesFileUtils {
     }
 
     public static Properties readFromPropertiesFile(String filePath) {
+        return readFromPropertiesFile(new File(filePath));
+    }
+
+    public static Properties readFromPropertiesFile(File file) {
         Properties properties = new Properties();
-        try (InputStream fileInputStream = new FileInputStream(filePath)) {
+        try (InputStream fileInputStream = new FileInputStream(file)) {
             properties.load(fileInputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            ConsoleUtils.logError("exception when read from properties file", e);
         }
         return properties;
     }
