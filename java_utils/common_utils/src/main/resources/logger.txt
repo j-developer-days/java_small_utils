@@ -1,0 +1,2 @@
+#values from that enum LoggerLevel
+com.jdev.logger.ConsoleLogger=INFO
