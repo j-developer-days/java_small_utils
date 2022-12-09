@@ -180,7 +180,7 @@ public class ScreenShooterStarter {
                 exit();
             }
             default: {
-                System.out.println("NOT RIGHT INPUT - " + menuItem);
+                ConsoleUtils.printToConsole("NOT RIGHT INPUT - " + menuItem);
                 closeConsole();
             }
         }
