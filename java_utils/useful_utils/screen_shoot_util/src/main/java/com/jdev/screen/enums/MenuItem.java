@@ -26,6 +26,7 @@ public enum MenuItem {
     RESET(10, "Reset previous parameters"),
     SHOW_MENU(11, "Show menu"),
     IMPORT_SETTINGS(25, "Import settings"),
+    EXPORT_SETTINGS(29, "Export settings"),
     EXIT(0, "exit");
 
     private int menuNumber;
