@@ -37,9 +37,9 @@ public enum MenuItem {
 
     public static MenuItem createMenuItem(int number) {
         MenuItem[] values = MenuItem.values();
-        for (var i = 0; i < values.length; i++) {
-            if (number == values[i].menuNumber) {
-                return values[i];
+        for (MenuItem value : values) {
+            if (number == value.menuNumber) {
+                return value;
             }
         }
         throw new RuntimeException("Can't find right number - " + number);

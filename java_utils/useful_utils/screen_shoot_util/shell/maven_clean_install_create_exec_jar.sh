@@ -22,6 +22,7 @@ cp -v ../target/classes/logger.properties ../$V_EXEC_JAR
 rm -rfv ../$V_EXEC_JAR/libs/ &&
 cp -rv ../target/libs/ ../$V_EXEC_JAR/libs/ &&
 cp -v run_jar_file.sh ../$V_EXEC_JAR/run_jar_file.sh
+cp -v run_jar_file_with_custom_sytem_property_for_logger.sh ../$V_EXEC_JAR/run_jar_file_with_custom_sytem_property_for_logger.sh
 
 #sleep 2 && clear && rm -rfv ../$V_EXEC_JAR
 
