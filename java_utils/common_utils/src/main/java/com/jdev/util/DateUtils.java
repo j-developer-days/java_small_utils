@@ -12,6 +12,10 @@ public class DateUtils {
         return getLocalDateTimeNowAsText(DEFAULT_DATE_TIME_FORMAT);
     }
 
+    public static LocalDateTime createLocalDateTime(String dateTimeAsString) {
+        return LocalDateTime.parse(dateTimeAsString, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT));
+    }
+
     public static String getLocalDateTimeNowAsText(String pattern) {
         return getLocalDateTimeAsText(LocalDateTime.now(), pattern);
     }

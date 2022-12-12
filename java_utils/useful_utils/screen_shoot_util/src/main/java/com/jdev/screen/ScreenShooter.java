@@ -2,6 +2,7 @@ package com.jdev.screen;
 
 import com.jdev.logger.ConsoleLogger;
 import com.jdev.util.DateUtils;
+import com.jdev.util.StringUtils;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -87,6 +88,7 @@ public class ScreenShooter {
         CONSOLE_LOGGER.info("begin...");
 
         validation();
+        showAllEnabledOptions();
         convert();
         timeOut(innerDelayOnStartUpMs);
 
@@ -214,6 +216,29 @@ public class ScreenShooter {
         if ((count > 0 && countImages != count) || count <= 0) {
             timeOut(innerTimeOutBetweenScreenShootsMs);
         }
+    }
+
+    private void showAllEnabledOptions() {
+        CONSOLE_LOGGER.info(StringUtils.multipleCharByCount('=', 100));
+        CONSOLE_LOGGER.info("Options:");
+        CONSOLE_LOGGER.info("count = {}", count);
+
+        CONSOLE_LOGGER.info("rectangleSize: ");
+        CONSOLE_LOGGER.info("\tX = {}", size.getX());
+        CONSOLE_LOGGER.info("\tY = {}", size.getY());
+        CONSOLE_LOGGER.info("\twidth = {}", size.getWidth());
+        CONSOLE_LOGGER.info("\theight = {}", size.getHeight());
+
+        CONSOLE_LOGGER.info("fileFormat = {}", fileFormat);
+        CONSOLE_LOGGER.info("fileName = {}", fileName);
+        CONSOLE_LOGGER.info("delayOnStartUp = {} second(s)", delayOnStartUp);
+        CONSOLE_LOGGER.info("timeOutBetweenScreenShoots = {} second(s)", timeOutBetweenScreenShoots);
+        CONSOLE_LOGGER.info("storeFolder = {}", storeFolder);
+        CONSOLE_LOGGER.info("doScreenShootBefore = {}",
+                (doScreenShootBefore == null ? null : DateUtils.getLocalDateTimeAsText(doScreenShootBefore)));
+        CONSOLE_LOGGER.info("period = {}", period);
+        CONSOLE_LOGGER.info("doScreenShootIfMousePositionChange = {}", doScreenShootIfMousePositionChange);
+        CONSOLE_LOGGER.info(StringUtils.multipleCharByCount('=', 100));
     }
 
 }

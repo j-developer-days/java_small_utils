@@ -4,7 +4,9 @@ public class StringUtils {
 
     public static final String APOSTROPHE = "'";
     public static final String TAB = "\t";
+    public static final String NEW_LINE = "\n";
     public static final String SPACE = " ";
+    public static final String EMPTY = "";
     public static final String COLON = ":";
 
     private static final int DEFAULT_COUNT = 150;

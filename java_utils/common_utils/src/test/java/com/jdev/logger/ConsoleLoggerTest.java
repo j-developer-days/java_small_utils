@@ -1,6 +1,6 @@
 package com.jdev.logger;
 
-import com.jdev.util.ConsoleUtils;
+import com.jdev.console.ConsoleUtils;
 import org.junit.jupiter.api.*;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)

@@ -1,6 +1,6 @@
 package com.jdev.file;
 
-import com.jdev.util.ConsoleUtils;
+import com.jdev.console.ConsoleUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
