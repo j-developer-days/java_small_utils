@@ -37,7 +37,7 @@ public class ScreenShooterStarter {
         System.exit(0);
     }
 
-    private static final void closeConsole() {
+    private static void closeConsole() {
         if (reader != null) {
             try {
                 reader.close();
@@ -56,15 +56,6 @@ public class ScreenShooterStarter {
         }
     }
 
-    private static boolean consoleInputConvertToBoolean() {
-        try {
-            return Boolean.valueOf(reader.readLine());
-        } catch (IOException e) {
-            ConsoleUtils.logError("problem when reading from console", e);
-            throw new RuntimeException(e);
-        }
-    }
-
     private static String getConsoleInput() {
         try {
             return reader.readLine();
@@ -76,7 +67,11 @@ public class ScreenShooterStarter {
 
     private void mainMenu() {
         ConsoleUtils.printToConsole("Please set next parameter: ");
-        SCREEN_SHOOTER_STARTER.menuRightItem(createMenuItem(consoleInputConvertToInt()), null);
+        SCREEN_SHOOTER_STARTER.menuRightItem(createMenuItem(consoleInputConvertToInt()));
+    }
+
+    private void menuRightItem(MenuItem menuItem) {
+        menuRightItem(menuItem, null);
     }
 
     private void menuRightItem(MenuItem menuItem, String value) {
@@ -140,7 +135,7 @@ public class ScreenShooterStarter {
                 propertiesForExport.put(menuItem.name(), finalValue);
                 break;
             }
-            case WORK_TYPE:{
+            case WORK_TYPE: {
                 ConsoleUtils.printToConsole("Please choose of of 3 options: 81,82,83");
                 break;
             }
