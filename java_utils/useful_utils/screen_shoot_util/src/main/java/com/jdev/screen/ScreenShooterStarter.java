@@ -22,6 +22,7 @@ public class ScreenShooterStarter {
     private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static ScreenShooter SCREEN_SHOOTER = new ScreenShooter();
     private WorkType lastWorkType;
+    private Properties propertiesForExport = new Properties();
 
     public static void main(String[] args) {
         SCREEN_SHOOTER_STARTER.showMenuParameters();
@@ -88,69 +89,98 @@ public class ScreenShooterStarter {
         switch (menuItem) {
             case TIME_OUT: {
                 showBeforeSetParam(isImport, "please insert time out in seconds, second should be great or equal 0");
-                SCREEN_SHOOTER.setTimeOutBetweenScreenShoots(getConsoleInputConvertToInt(value));
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setTimeOutBetweenScreenShoots(Integer.valueOf(finalValue));
+                propertiesForExport.put(menuItem.name(), finalValue);
                 break;
             }
             case DELAY_ON_START_UP: {
                 showBeforeSetParam(isImport, "please insert delay in seconds between screen shoots, second should be great or equal 0");
-                SCREEN_SHOOTER.setDelayOnStartUp(getConsoleInputConvertToInt(value));
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setDelayOnStartUp(Integer.valueOf(finalValue));
+                propertiesForExport.put(menuItem.name(), finalValue);
                 break;
             }
             case WINDOW_SIZE: {
                 showBeforeSetParam(isImport, "please insert " + menuItem.getMenuDescription());
-                String[] split = (value == null ? getConsoleInput() : value).split(",");
+                final String finalValue = value == null ? getConsoleInput() : value;
+                String[] split = finalValue.split(",");
 
                 if (split.length < 4) {
                     ConsoleUtils.printToConsole("not right added, example: 0,150,1920,1080(x,y,width,height)");
                     break;
                 }
 
+                propertiesForExport.put(menuItem.name(), finalValue);
                 SCREEN_SHOOTER.setSize(new Rectangle(Integer.valueOf(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[3])));
                 break;
             }
             case FILE_FORMAT: {
                 showBeforeSetParam(isImport, "please add file format: ");
-                SCREEN_SHOOTER.setFileFormat(value == null ? getConsoleInput() : value);
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setFileFormat(finalValue);
+                propertiesForExport.put(menuItem.name(), finalValue);
                 break;
             }
             case FILE_NAME_PREFIX: {
                 showBeforeSetParam(isImport, "please set file name prefix: ");
-                SCREEN_SHOOTER.setFileName(value == null ? getConsoleInput() : value);
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setFileName(finalValue);
+                propertiesForExport.put(menuItem.name(), finalValue);
                 break;
             }
             case STORE_FOLDER: {
                 showBeforeSetParam(isImport, "please set folder for save images: ");
-                SCREEN_SHOOTER.setStoreFolder(value == null ? getConsoleInput() : value);
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setStoreFolder(finalValue);
+                propertiesForExport.put(menuItem.name(), finalValue);
                 break;
             }
             case DO_SCREEN_SHOOT_IF_MOUSE_MOVE: {
                 showBeforeSetParam(isImport, "please set true/false do screen shoot if mouse move");
-                SCREEN_SHOOTER.setDoScreenShootIfMousePositionChange(Boolean.valueOf(value == null ? getConsoleInput() : value));
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setDoScreenShootIfMousePositionChange(Boolean.valueOf(finalValue));
+                propertiesForExport.put(menuItem.name(), finalValue);
+                break;
+            }
+            case WORK_TYPE:{
+                ConsoleUtils.printToConsole("Please choose of of 3 options: 81,82,83");
                 break;
             }
             case WORK_TYPE_BY_COUNT: {
                 showBeforeSetParam(isImport, "Run by count, count should be great than 0");
-                SCREEN_SHOOTER.setCount(getConsoleInputConvertToInt(value));
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setCount(Integer.valueOf(finalValue));
+                propertiesForExport.put(menuItem.name(), finalValue);
                 lastWorkType = WorkType.WORK_TYPE_BY_COUNT;
                 minimalDemand();
                 break;
             }
             case WORK_TYPE_BY_DATE: {
                 showBeforeSetParam(isImport, "pattern should be - day.month.year hour:minute:second, example - " + DateUtils.getLocalDateTimeNowAsText());
-                SCREEN_SHOOTER.setDoScreenShootBefore(DateUtils.createLocalDateTime(value == null ? getConsoleInput() : value));
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setDoScreenShootBefore(DateUtils.createLocalDateTime(finalValue));
+                propertiesForExport.put(menuItem.name(), finalValue);
                 lastWorkType = WorkType.WORK_TYPE_BY_DATE;
                 minimalDemand();
                 break;
             }
             case WORK_TYPE_BY_PERIOD: {
                 showBeforeSetParam(isImport, "set as period: you may use these prefixes: ss/mm/HH/dd/MM/yy - (/ means OR) and positive number, example - ss10 - 10 seconds, yy1 - 1 year");
-                SCREEN_SHOOTER.setPeriod(value == null ? getConsoleInput() : value);
+                final String finalValue = value == null ? getConsoleInput() : value;
+                SCREEN_SHOOTER.setPeriod(finalValue);
+                propertiesForExport.put(menuItem.name(), finalValue);
                 lastWorkType = WorkType.WORK_TYPE_BY_PERIOD;
                 minimalDemand();
                 break;
             }
             case LEAVE_ONLY_LAST_WORK_TYPE: {
-                leaveLastWorkType(true);
+                if (lastWorkType == null) {
+                    CONSOLE_LOGGER.warn("we didn't choose one of 3 options still!!!");
+                } else {
+                    lastWorkType.leaveLastWorkType(SCREEN_SHOOTER);
+                    minimalDemand();
+                }
                 break;
             }
             case RUN: {
@@ -162,7 +192,7 @@ public class ScreenShooterStarter {
                 break;
             }
             case RESET: {
-                SCREEN_SHOOTER.doScreenShoot();
+                SCREEN_SHOOTER = new ScreenShooter();
                 break;
             }
             case IMPORT_SETTINGS: {
@@ -173,6 +203,12 @@ public class ScreenShooterStarter {
                 boolean finalIsImport = isImport;
                 properties.forEach((key, propertyValue) -> menuRightItem(MenuItem.valueOf(key.toString().toUpperCase()), propertyValue.toString(), finalIsImport));
                 menuRightItem(MenuItem.RUN, null, isImport);
+                break;
+            }
+            case EXPORT_SETTINGS: {
+                File file = new File("export.properties");
+                PropertiesFileUtils.writeToPropertiesFile(propertiesForExport, file);
+                ConsoleUtils.printToConsole("Export file - " + file.getAbsolutePath());
                 break;
             }
             case SHOW_MENU: {

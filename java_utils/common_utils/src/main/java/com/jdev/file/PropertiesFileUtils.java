@@ -19,6 +19,10 @@ public class PropertiesFileUtils {
         writeToPropertiesFile(properties, filePath, null);
     }
 
+    public static void writeToPropertiesFile(Properties properties, File file) {
+        writeToPropertiesFile(properties, file.getAbsolutePath(), null);
+    }
+
     public static Properties readFromPropertiesFile(String filePath) {
         return readFromPropertiesFile(new File(filePath));
     }
