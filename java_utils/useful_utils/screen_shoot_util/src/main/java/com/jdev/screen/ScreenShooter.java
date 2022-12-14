@@ -1,6 +1,8 @@
 package com.jdev.screen;
 
 import com.jdev.logger.ConsoleLogger;
+import com.jdev.screen.enums.ErrorType;
+import com.jdev.screen.exception.ScreenShooterException;
 import com.jdev.util.DateUtils;
 import com.jdev.util.StringUtils;
 import lombok.NoArgsConstructor;
@@ -127,9 +129,8 @@ public class ScreenShooter {
         if ((count > 0 && doScreenShootBefore != null && period != null) ||
                 !(count > 0 ^ doScreenShootBefore != null ^ period != null))
         {
-            throw new RuntimeException(
-                    "Should be chose only one of option: \n1)count = '" + count + "'" + "\n2)doScreenShootBefore = '" +
-                            doScreenShootBefore + "'\n3)period = '" + period + "'");
+            throw ScreenShooterException.of(ErrorType.CHOOSE_ONE_OF_3_OPTIONS, "Should be chose only one of option: \n1)count = '" + count + "'" + "\n2)doScreenShootBefore = '" +
+                    doScreenShootBefore + "'\n3)period = '" + period + "'");
         }
 
         if (size == null) {
@@ -174,7 +175,7 @@ public class ScreenShooter {
                     break;
                 }
                 default: {
-                    throw new RuntimeException("Not right parameter - [" + periodDefinition + "]");
+                    throw ScreenShooterException.of(ErrorType.NOT_RIGHT_OPTION_FOR_PERIOD_PREFIX, "Not right parameter - [" + periodDefinition + "]");
                 }
             }
         }

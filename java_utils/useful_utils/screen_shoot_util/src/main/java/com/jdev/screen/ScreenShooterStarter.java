@@ -5,6 +5,7 @@ import com.jdev.file.PropertiesFileUtils;
 import com.jdev.logger.ConsoleLogger;
 import com.jdev.screen.enums.MenuItem;
 import com.jdev.screen.enums.WorkType;
+import com.jdev.screen.exception.ScreenShooterException;
 import com.jdev.util.DateUtils;
 
 import java.awt.*;
@@ -153,11 +154,15 @@ public class ScreenShooterStarter {
                 break;
             }
             case RUN: {
-                SCREEN_SHOOTER.doScreenShoot();
+                try {
+                    SCREEN_SHOOTER.doScreenShoot();
+                } catch (ScreenShooterException e) {
+                    CONSOLE_LOGGER.error("please check exception type and add right value, or reset previous settings, error type - {}", e, e.getErrorType().getDescription());
+                }
                 break;
             }
             case RESET: {
-                SCREEN_SHOOTER = new ScreenShooter();
+                SCREEN_SHOOTER.doScreenShoot();
                 break;
             }
             case IMPORT_SETTINGS: {
