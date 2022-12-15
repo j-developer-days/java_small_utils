@@ -1,0 +1,25 @@
+-----git tag list
+git tag -l
+
+-----create new tag with version and message
+git tag -a SS_2.0-15.12.2022 -m "Screen shooter 2.0-15.12.2022"
+
+-----git tag list
+git tag -l
+
+-------git show by tag version
+git show SS_2.0-15.12.2022
+
+git log -2
+
+--show all tags
+git tag
+
+-----git push tag to remote by name
+git push origin SS_2.0-15.12.2022
+
+-----git push tag to remote all tags
+git push origin --tags
+
+-----git log in one line
+git log --pretty=oneline
