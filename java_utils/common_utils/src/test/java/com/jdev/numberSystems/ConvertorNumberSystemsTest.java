@@ -45,4 +45,14 @@ class ConvertorNumberSystemsTest {
         });
     }
 
+    @Test
+    void test_convertorFromToM26() {
+        Stream.iterate(1, integer -> integer + 1).limit(100).forEach(integer -> {
+            String convertFromDecimalToM26 = ConvertorNumberSystems.convertFromDecimalToM26(integer);
+            int i = ConvertorNumberSystems.convertFromM26ToDecimal(convertFromDecimalToM26);
+            ConsoleUtils.printToConsole(integer + " - " + convertFromDecimalToM26);
+            Assertions.assertEquals(integer, i);
+        });
+    }
+
 }

@@ -1,6 +1,9 @@
 package com.jdev.numberSystems;
 
+import com.jdev.Generating;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConvertorNumberSystems {
@@ -8,20 +11,23 @@ public class ConvertorNumberSystems {
     private static final Map<String, Integer> HEX_TO_DECIMAL = new HashMap<>(6);
     private static final Map<Integer, String> DECIMAL_TO_HEX = new HashMap<>(6);
 
-    static {
-        HEX_TO_DECIMAL.put("A", 10);
-        HEX_TO_DECIMAL.put("B", 11);
-        HEX_TO_DECIMAL.put("C", 12);
-        HEX_TO_DECIMAL.put("D", 13);
-        HEX_TO_DECIMAL.put("E", 14);
-        HEX_TO_DECIMAL.put("F", 15);
+    private static final Map<String, Integer> M26_TO_DECIMAL = new HashMap<>(16);
+    private static final Map<Integer, String> DECIMAL_TO_M26 = new HashMap<>(16);
 
-        DECIMAL_TO_HEX.put(10, "A");
-        DECIMAL_TO_HEX.put(11, "B");
-        DECIMAL_TO_HEX.put(12, "C");
-        DECIMAL_TO_HEX.put(13, "D");
-        DECIMAL_TO_HEX.put(14, "E");
-        DECIMAL_TO_HEX.put(15, "F");
+    static {
+        List<Character> upperCaseEnglishLetters = Generating.getUpperCaseEnglishLetters();
+        for (int i = 0; i < 16; i++) {
+            M26_TO_DECIMAL.put(upperCaseEnglishLetters.get(i).toString(), i + 10);
+            DECIMAL_TO_M26.put(i + 10, upperCaseEnglishLetters.get(i).toString());
+            if (i < 6) {
+                HEX_TO_DECIMAL.put(upperCaseEnglishLetters.get(i).toString(), i + 10);
+                DECIMAL_TO_HEX.put(i + 10, upperCaseEnglishLetters.get(i).toString());
+            }
+        }
+    }
+
+    public static int convertFromM26ToDecimal(String input) {
+        return convertFromByTypeToDecimal(input, 26);
     }
 
     public static int convertFromHexToDecimal(String input) {
@@ -47,7 +53,7 @@ public class ConvertorNumberSystems {
     }
 
     private static int convertFromByTypeToDecimal(String input, int type) {
-        if (type == 2 || type == 8 || type == 16) {
+        if (type == 2 || type == 8 || type == 16 || type == 26) {
             final char[] chars = input.toCharArray();
             int result = 0;
 
@@ -59,6 +65,10 @@ public class ConvertorNumberSystems {
                     result = result + (int) Math.pow(type, y++) * (Character.isDigit(aChar) ?
                             Character.getNumericValue(aChar) :
                             HEX_TO_DECIMAL.get(Character.toString(Character.toUpperCase(aChar))));
+                } else if (type == 26) {
+                    result = result + (int) Math.pow(type, y++) * (Character.isDigit(aChar) ?
+                            Character.getNumericValue(aChar) :
+                            M26_TO_DECIMAL.get(Character.toString(Character.toUpperCase(aChar))));
                 } else {
                     throw new RuntimeException("Not a number - " + aChar);
                 }
@@ -80,8 +90,12 @@ public class ConvertorNumberSystems {
         return convertFromDecimalToByType(input, 16);
     }
 
+    public static String convertFromDecimalToM26(int input) {
+        return convertFromDecimalToByType(input, 26);
+    }
+
     private static String convertFromDecimalToByType(int input, int type) {
-        if (type == 2 || type == 8 || type == 16) {
+        if (type == 2 || type == 8 || type == 16 || type == 26) {
             StringBuilder result = new StringBuilder();
 
             int divide = input;
@@ -93,6 +107,13 @@ public class ConvertorNumberSystems {
                         result.append(i);
                     } else {
                         result.append(DECIMAL_TO_HEX.get(i));
+                    }
+                } else if (type == 26) {
+                    int i = divide % type;
+                    if (i >= 0 && i <= 9) {
+                        result.append(i);
+                    } else {
+                        result.append(DECIMAL_TO_M26.get(i));
                     }
                 } else {
                     result.append(divide % type);
