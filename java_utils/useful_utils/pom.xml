@@ -8,16 +8,15 @@
         <version>1.0-16.11.2022</version>
     </parent>
 
-    <groupId>com.jdev</groupId>
     <artifactId>useful_utils</artifactId>
     <version>1.0-16.11.2022</version>
     <packaging>pom</packaging>
 
     <name>useful_utils</name>
 
-    <properties></properties>
+    <properties/>
 
-    <dependencies></dependencies>
+    <dependencies/>
 
     <build>
         <finalName>useful_utils</finalName>

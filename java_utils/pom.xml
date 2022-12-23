@@ -8,7 +8,6 @@
         <version>1.3.3-01.12.2022</version>
     </parent>
 
-    <groupId>com.jdev</groupId>
     <artifactId>java_utils</artifactId>
     <version>1.0-16.11.2022</version>
     <packaging>pom</packaging>
@@ -19,11 +18,12 @@
         <module>demonstrations</module>
         <module>useful_utils</module>
         <module>useful_utils/screen_shoot_util</module>
+        <module>useful_utils/password-generator</module>
     </modules>
 
-    <properties></properties>
+    <properties/>
 
-    <dependencies></dependencies>
+    <dependencies/>
 
     <build>
         <finalName>java_utils</finalName>
