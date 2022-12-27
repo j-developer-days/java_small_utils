@@ -8,12 +8,24 @@ public class ConsoleUtils {
         printToConsole(StringUtils.multipleCharByCount(c, count));
     }
 
+    public static void printDelimiter(String text, int count) {
+        printToConsole(StringUtils.multipleCharByCount(text, count));
+    }
+
     public static void printDelimiter(char c) {
         printDelimiter(c, -1);
     }
 
     public static void printDelimiter() {
         printDelimiter('*', -1);
+    }
+
+    public static void printDelimiterWithString(String text) {
+        printDelimiter(text, -1);
+    }
+
+    public static void printDelimiterWithString(String text, int count) {
+        printDelimiter(text, count);
     }
 
     public static void logError(String message, Exception e) {

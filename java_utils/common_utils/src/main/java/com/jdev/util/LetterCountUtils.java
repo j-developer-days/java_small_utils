@@ -8,31 +8,35 @@ import java.util.Set;
 
 public class LetterCountUtils {
 
+    public static Map<Character, Integer> checkLetterCount(String str, boolean isCaseSensitive) {
+        return checkLetterCount(str, isCaseSensitive, false);
+    }
     public static Map<Character, Integer> checkLetterCount(String str, boolean isCaseSensitive, boolean needToPrintResult) {
         Map<Character, Integer> characterCount = new HashMap<>();
         for (int i = 0; i < str.length(); i++) {
-            Character ch = str.charAt(i);
+            char ch = str.charAt(i);
             if (!isCaseSensitive) {
                 ch = Character.toLowerCase(ch);
             }
-            if (characterCount.get(ch) == null) {
-                characterCount.put(ch, 1);
-            } else {
-                characterCount.put(ch, characterCount.get(ch) + 1);
-            }
+            characterCount.computeIfPresent(ch, (character, integer) -> integer + 1);
+            characterCount.putIfAbsent(ch, 1);
         }
 
         if (needToPrintResult) {
             characterCount.forEach((character, integer) -> ConsoleUtils.printToConsole(character + " = " + integer));
-            ConsoleUtils.printToConsole("----------------------------");
+            ConsoleUtils.printDelimiter('-', 50);
             ConsoleUtils.printToConsole("count - " + characterCount.size() + "\n");
 
-            ConsoleUtils.printToConsole("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-");
+            ConsoleUtils.printDelimiterWithString("*-", 50);
         }
         return characterCount;
     }
 
-    public static Map<Character, Integer> getOnlyWhichConditionPass(Map<Character, Integer> characterCount, int count, Sign sign) {
+    public static Map<Character, Integer> getOnlyWhichConditionPass(String str, boolean isCaseSensitive, int count, Sign sign) {
+        return getOnlyWhichConditionPass(str, isCaseSensitive, false, count, sign);
+    }
+    public static Map<Character, Integer> getOnlyWhichConditionPass(String str, boolean isCaseSensitive, boolean needToPrintResult, int count, Sign sign) {
+        Map<Character, Integer> characterCount = checkLetterCount(str, isCaseSensitive, needToPrintResult);
         Set<Character> keys = characterCount.keySet();
         Map<Character, Integer> result = new HashMap<>();
         for (Character currentChar : keys) {

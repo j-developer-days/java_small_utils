@@ -22,4 +22,11 @@ public class StringUtils {
         return result.toString();
     }
 
+    public static String multipleCharByCount(String text, int count) {
+        if (count <= 0) {
+            count = DEFAULT_COUNT;
+        }
+        return String.valueOf(text).repeat(count);
+    }
+
 }
