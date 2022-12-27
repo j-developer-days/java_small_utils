@@ -1,6 +1,6 @@
 package com.jdev.mouse_info;
 
-import com.jdev.util.ConsoleUtils;
+import com.jdev.console.ConsoleUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

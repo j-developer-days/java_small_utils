@@ -10,7 +10,6 @@
     <version>1.0-16.11.2022</version>
   </parent>
 
-  <groupId>com.jdev</groupId>
   <artifactId>demonstrations</artifactId>
   <version>1.0-22.11.2022</version>
 
@@ -25,6 +24,10 @@
       <groupId>com.jdev</groupId>
       <artifactId>common_utils</artifactId>
       <version>${common_utils.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.sarxos</groupId>
+      <artifactId>webcam-capture</artifactId>
     </dependency>
   </dependencies>
 
