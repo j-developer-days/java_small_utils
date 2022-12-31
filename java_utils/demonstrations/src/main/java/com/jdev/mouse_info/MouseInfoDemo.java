@@ -1,6 +1,6 @@
 package com.jdev.mouse_info;
 
-import com.jdev.util.ConsoleUtils;
+import com.jdev.console.ConsoleUtils;
 
 import java.awt.*;
 import java.awt.image.ColorModel;
@@ -32,10 +32,10 @@ public class MouseInfoDemo {
             }
 
             Point location = MouseInfo.getPointerInfo().getLocation();
-            System.out.println("date - " + LocalDateTime.now() + "\tX = " + location.getX() + "\tY = " + location.getY());
+            ConsoleUtils.printToConsole("date - " + LocalDateTime.now() + "\tX = " + location.getX() + "\tY = " + location.getY());
 
             if(++count > 5){
-                System.out.println("Do you want to continue? \n If you want to continue please press 'c' or if you want to stop press 's', thanks!");
+                ConsoleUtils.printToConsole("Do you want to continue? \n If you want to continue please press 'c' or if you want to stop press 's', thanks!");
                 count = 1;
                 isSleep = false;
                 if(scannerFromConsole.nextLine().equals("s")){
@@ -44,26 +44,26 @@ public class MouseInfoDemo {
             }
         }
 
-        System.out.println("Stop!");
+        ConsoleUtils.printToConsole("Stop!");
     }
 
     private static void showCoordinate() throws InterruptedException {
         for (;true;){
             Thread.sleep(5_000);
             Point location = MouseInfo.getPointerInfo().getLocation();
-            System.out.println("date - " + LocalDateTime.now() + "\tX = " + location.getX() + "\tY = " + location.getY());
+            ConsoleUtils.printToConsole("date - " + LocalDateTime.now() + "\tX = " + location.getX() + "\tY = " + location.getY());
         }
     }
 
     private static void showMouseInfo() {
-        System.out.println("get number of button on the mouse - " + MouseInfo.getNumberOfButtons());
+        ConsoleUtils.printToConsole("get number of button on the mouse - " + MouseInfo.getNumberOfButtons());
         ConsoleUtils.printDelimiter('*', 100);
 
         Point pointLocation = MouseInfo.getPointerInfo().getLocation();
-        System.out.println("X = " + pointLocation.getX() + "\tY = " + pointLocation.getY());
+        ConsoleUtils.printToConsole("X = " + pointLocation.getX() + "\tY = " + pointLocation.getY());
         ConsoleUtils.printDelimiter('-');
 
-        System.out.println("get mouse info device configuration count - " + MouseInfo.getPointerInfo().getDevice().getConfigurations().length);
+        ConsoleUtils.printToConsole("get mouse info device configuration count - " + MouseInfo.getPointerInfo().getDevice().getConfigurations().length);
         ConsoleUtils.printDelimiter('$');
 
         GraphicsConfiguration defaultConfiguration = MouseInfo.getPointerInfo().getDevice().getDefaultConfiguration();
@@ -72,23 +72,23 @@ public class MouseInfoDemo {
         ConsoleUtils.printDelimiter('-', 50);
 
         ColorModel colorModel = defaultConfiguration.getColorModel();
-        System.out.println("colorModel - " + colorModel);
+        ConsoleUtils.printToConsole("colorModel - " + colorModel);
         final var pixel = 100;
-        System.out.println("red - " + colorModel.getRed(pixel) + "\tgreen - " + colorModel.getGreen(pixel) + "\tblue - " + colorModel.getBlue(pixel));
+        ConsoleUtils.printToConsole("red - " + colorModel.getRed(pixel) + "\tgreen - " + colorModel.getGreen(pixel) + "\tblue - " + colorModel.getBlue(pixel));
         ConsoleUtils.printDelimiter('|', 50);
 
-        System.out.println("color model num components = " + colorModel.getNumComponents());
+        ConsoleUtils.printToConsole("color model num components = " + colorModel.getNumComponents());
         System.out.print("color model transparency = " + colorModel.getTransparency() + "\t");
         switch (colorModel.getTransparency()){
             case Transparency.OPAQUE: {
-                System.out.println("OPAQUE");
+                ConsoleUtils.printToConsole("OPAQUE");
                 break;
             }
             case Transparency.BITMASK: {
-                System.out.println("BITMASK");
+                ConsoleUtils.printToConsole("BITMASK");
                 break;
             }case Transparency.TRANSLUCENT: {
-                System.out.println("TRANSLUCENT");
+                ConsoleUtils.printToConsole("TRANSLUCENT");
                 break;
             }
         }
@@ -96,12 +96,12 @@ public class MouseInfoDemo {
     }
 
     private static void showRectangle(Rectangle rectangle) {
-        System.out.println("Full info from rectangle - " + rectangle);
+        ConsoleUtils.printToConsole("Full info from rectangle - " + rectangle);
 
-        System.out.println("X = " + rectangle.getX());
-        System.out.println("Y = " + rectangle.getY());
-        System.out.println("width = " + rectangle.getWidth());
-        System.out.println("height = " + rectangle.getHeight());
+        ConsoleUtils.printToConsole("X = " + rectangle.getX());
+        ConsoleUtils.printToConsole("Y = " + rectangle.getY());
+        ConsoleUtils.printToConsole("width = " + rectangle.getWidth());
+        ConsoleUtils.printToConsole("height = " + rectangle.getHeight());
     }
 
 }

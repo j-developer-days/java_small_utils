@@ -2,6 +2,7 @@ package com.jdev.webcam;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
+import com.jdev.console.ConsoleUtils;
 import io.humble.video.*;
 import io.humble.video.awt.MediaPictureConverter;
 import io.humble.video.awt.MediaPictureConverterFactory;
@@ -124,7 +125,7 @@ public class WebCamVideoDemo {
             final BufferedImage image = webcam.getImage();
             final BufferedImage frame = convertToType(image, BufferedImage.TYPE_3BYTE_BGR);
 
-            System.out.println("Record frame " + frame);
+            ConsoleUtils.printToConsole("Record frame " + frame);
 
             /**
              * This is LIKELY not in YUV420P format, so we're going to convert it using some handy

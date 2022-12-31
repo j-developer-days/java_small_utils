@@ -1,6 +1,7 @@
 package com.jdev.mouse_info;
 
-import com.jdev.util.ConsoleUtils;
+
+import com.jdev.console.ConsoleUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -30,10 +31,10 @@ public class MouseInformation {
            int x =  RANDOM.nextInt((int)screenSize.getWidth());
            int y =  RANDOM.nextInt((int)screenSize.getHeight());
 
-            System.out.println("X = " + x + "\ty = " + y);
+            ConsoleUtils.printToConsole("X = " + x + "\ty = " + y);
             robot.mouseMove(x, y);
             Color pixelColor = robot.getPixelColor(x, y);
-            System.out.println("color is - " + pixelColor);
+            ConsoleUtils.printToConsole("color is - " + pixelColor);
             robot.delay(4_000);
             ConsoleUtils.printDelimiter('$');
 
@@ -53,7 +54,7 @@ public class MouseInformation {
         ConsoleUtils.printDelimiter('#');
 
         Color pixelColor = robot.getPixelColor(x, y);
-        System.out.println("color info - " + pixelColor);
+        ConsoleUtils.printToConsole("color info - " + pixelColor);
 
 //        clickMouseButton(InputEvent.BUTTON1_DOWN_MASK, robot, "Button1 - left button");
 //        clickMouseButton(InputEvent.BUTTON2_DOWN_MASK, robot, "Button2 - wheel scroll middle button");
@@ -68,7 +69,7 @@ public class MouseInformation {
         screenCapture(robot, MouseInfo.getPointerInfo().getDevice().getDefaultConfiguration().getBounds(), "image_full", "jpg");
 
         MultiResolutionImage multiResolutionScreenCapture = robot.createMultiResolutionScreenCapture(MouseInfo.getPointerInfo().getDevice().getDefaultConfiguration().getBounds());
-        multiResolutionScreenCapture.getResolutionVariants().forEach(image -> System.out.println(image));
+        multiResolutionScreenCapture.getResolutionVariants().forEach(image -> ConsoleUtils.printToConsole(image));
 
     }
 
@@ -87,22 +88,22 @@ public class MouseInformation {
         Thread.sleep(3_000);
         robot.mousePress(buttonNumber);
         robot.mouseRelease(buttonNumber);
-        System.out.println("Clicked - " + buttonName);
+        ConsoleUtils.printToConsole("Clicked - " + buttonName);
     }
 
     private static void showCurrentMouseLocation() {
         Point location = MouseInfo.getPointerInfo().getLocation();
-        System.out.println("X = " + location.getX() + "\tY = " + location.getY());
+        ConsoleUtils.printToConsole("X = " + location.getX() + "\tY = " + location.getY());
     }
 
     private static void getToolkitInfo() {
-        System.out.println("screen resolution is - " + Toolkit.getDefaultToolkit().getScreenResolution());
+        ConsoleUtils.printToConsole("screen resolution is - " + Toolkit.getDefaultToolkit().getScreenResolution());
         ConsoleUtils.printDelimiter('_', 200);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        System.out.println("H = " + screenSize.getHeight());
-        System.out.println("W = " + screenSize.getWidth());
-        System.out.println("Full info - " + screenSize.getSize());
+        ConsoleUtils.printToConsole("H = " + screenSize.getHeight());
+        ConsoleUtils.printToConsole("W = " + screenSize.getWidth());
+        ConsoleUtils.printToConsole("Full info - " + screenSize.getSize());
     }
 
 }

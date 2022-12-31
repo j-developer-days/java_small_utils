@@ -3,6 +3,7 @@ package com.jdev.webcam;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import com.jdev.console.ConsoleUtils;
 import com.jdev.util.DateUtils;
 
 import javax.imageio.ImageIO;
@@ -23,17 +24,17 @@ public class WebCamPhotoDemo {
         Webcam webcam = Webcam.getDefault();
         webcam.setViewSize(WebcamResolution.VGA.getSize());
         webcam.open();
-        System.out.println("webcam - " + webcam.isOpen());
+        ConsoleUtils.printToConsole("webcam - " + webcam.isOpen());
 
         Dimension resolution = webcam.getDevice().getResolution();
-        System.out.println("resolution - " + resolution.getHeight() + ", " + resolution.getWidth());
-//        System.out.println("image.getType() - " + webcam.getImage().getType());
+        ConsoleUtils.printToConsole("resolution - " + resolution.getHeight() + ", " + resolution.getWidth());
+//        ConsoleUtils.printToConsole("image.getType() - " + webcam.getImage().getType());
 
         final String fileFormat = "png";
         for (var i = 0; i < count; i++) {
             File file = new File("ImageFromWebCam_" + DateUtils.getLocalDateTimeNowAsText() + "." + fileFormat);
             ImageIO.write(webcam.getImage(), fileFormat, file);
-            System.out.println("#" + i + " - " + file.getAbsolutePath());
+            ConsoleUtils.printToConsole("#" + i + " - " + file.getAbsolutePath());
             Thread.sleep(TimeUnit.SECONDS.toMillis(timeOutInSecond));
         }
 
