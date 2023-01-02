@@ -1,6 +1,6 @@
 package com.jdev.numberSystems;
 
-import com.jdev.Generating;
+import com.jdev.util.CharacterUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ public class ConvertorNumberSystems {
     private static final Map<Integer, String> DECIMAL_TO_M26 = new HashMap<>(16);
 
     static {
-        List<Character> upperCaseEnglishLetters = Generating.getUpperCaseEnglishLetters();
+        List<Character> upperCaseEnglishLetters = CharacterUtils.getListEnglishAlphabetUpper();
         for (int i = 0; i < 16; i++) {
             M26_TO_DECIMAL.put(upperCaseEnglishLetters.get(i).toString(), i + 10);
             DECIMAL_TO_M26.put(i + 10, upperCaseEnglishLetters.get(i).toString());
