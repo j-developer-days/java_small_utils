@@ -3,9 +3,7 @@ package com.jdev;
 import com.jdev.console.ConsoleUtils;
 import com.jdev.enums.PasswordGeneratorCharacterType;
 import com.jdev.enums.PasswordGeneratorLevel;
-
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
+import com.jdev.util.ClipboardUtils;
 
 public class PasswordGeneratorRunner {
 
@@ -28,7 +26,7 @@ public class PasswordGeneratorRunner {
             final String passwordResult = passwordGenerator.generateRandomPassword();
             ConsoleUtils.printToConsole("Result is - " + passwordResult);
 
-            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(passwordResult), null);
+            ClipboardUtils.copyToClipboard(passwordResult, true);
         }
     }
 

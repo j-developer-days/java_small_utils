@@ -14,7 +14,7 @@
 
     <name>password-generator</name>
     <properties>
-        <common_utils.version>1.2.2-02.01.2023</common_utils.version>
+        <common_utils.version>1.2.3-04.01.2023</common_utils.version>
     </properties>
 
     <dependencies>
