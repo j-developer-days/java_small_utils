@@ -14,6 +14,11 @@
 
     <name>useful_utils</name>
 
+    <modules>
+        <module>screen_shoot_util</module>
+        <module>password-generator</module>
+    </modules>
+
     <properties/>
 
     <dependencies/>
