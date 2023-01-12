@@ -5,7 +5,7 @@ import lombok.Setter;
 import java.util.function.Function;
 
 @Setter
-public class CustomFillArray implements ArrayWorkingI {
+public class CustomFillArray extends SummaryArray {
 
     private int startValue = 1;
     private Function<Integer, Integer> function;

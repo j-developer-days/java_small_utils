@@ -1,6 +1,6 @@
 package com.jdev.arrays;
 
-public class OrderedArray implements ArrayWorkingI {
+public class OrderedArray extends SummaryArray {
 
     private int startValue = 1;
     private int currentValue = 1;

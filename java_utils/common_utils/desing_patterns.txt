@@ -9,3 +9,10 @@ Factory Pattern
     com.jdev.arrays.CustomFillArray.fillArray
     com.jdev.arrays.OrderedArray.fillArray
     com.jdev.arrays.RandomArray.fillArray
+
+Template Pattern
+    https://www.javatpoint.com/template-pattern
+    https://www.tutorialspoint.com/design_pattern/template_pattern.htm
+
+    com.jdev.arrays.SummaryArray.createAndFillArray
+    com.jdev.arrays.SummaryArray.summary

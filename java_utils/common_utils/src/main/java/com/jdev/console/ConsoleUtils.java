@@ -24,4 +24,8 @@ public class ConsoleUtils {
         System.out.println(o);
     }
 
+    public static void printToConsole() {
+        System.out.println();
+    }
+
 }
