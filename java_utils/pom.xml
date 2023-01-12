@@ -10,7 +10,7 @@
 
     <groupId>com.jdev</groupId>
     <artifactId>java_utils</artifactId>
-    <version>1.0-16.11.2022</version>
+    <version>${java_utils.version}</version>
     <packaging>pom</packaging>
 
     <name>java_utils(root)</name>
@@ -18,12 +18,13 @@
         <module>common_utils</module>
         <module>demonstrations</module>
         <module>useful_utils</module>
-        <module>useful_utils/screen_shoot_util</module>
     </modules>
 
-    <properties></properties>
+    <properties>
+        <java_utils.version>2-12.01.2023</java_utils.version>
+    </properties>
 
-    <dependencies></dependencies>
+    <dependencies/>
 
     <build>
         <finalName>java_utils</finalName>

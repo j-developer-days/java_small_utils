@@ -1,0 +1,7 @@
+java_utils
+	common_utils
+	demonstrations
+	useful_utils
+		db-performance
+		password-generator
+		screen_shoot_util

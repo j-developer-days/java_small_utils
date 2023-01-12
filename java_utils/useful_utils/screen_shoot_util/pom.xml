@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.jdev</groupId>
         <artifactId>useful_utils</artifactId>
-        <version>1.0-16.11.2022</version>
+        <version>${useful_utils.version}</version>
     </parent>
 
     <groupId>com.jdev</groupId>

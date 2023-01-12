@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <modules>
-        <module>password-generator</module>
-        <module>db-performance</module>
-    </modules>
 
     <parent>
         <groupId>com.jdev</groupId>
         <artifactId>java_utils</artifactId>
-        <version>1.0-16.11.2022</version>
+        <version>${java_utils.version}</version>
     </parent>
 
     <groupId>com.jdev</groupId>
     <artifactId>useful_utils</artifactId>
-    <version>1.0-16.11.2022</version>
+    <version>${useful_utils.version}</version>
     <packaging>pom</packaging>
 
     <name>useful_utils</name>
 
-    <properties></properties>
+    <modules>
+        <module>db-performance</module>
+        <module>password-generator</module>
+        <module>screen_shoot_util</module>
+    </modules>
 
-    <dependencies></dependencies>
+    <properties>
+        <useful_utils.version>2-12.01.2023</useful_utils.version>
+    </properties>
+
+    <dependencies/>
 
     <build>
         <finalName>useful_utils</finalName>
