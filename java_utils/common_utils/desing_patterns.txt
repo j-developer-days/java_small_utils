@@ -9,6 +9,3 @@ Factory Pattern
     com.jdev.arrays.CustomFillArray.fillArray
     com.jdev.arrays.OrderedArray.fillArray
     com.jdev.arrays.RandomArray.fillArray
-
-    //factory class
-    com.jdev.arrays.ArrayFillFactory.getArrayWorking
