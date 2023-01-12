@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jdev</groupId>
+        <artifactId>java_utils</artifactId>
+        <version>${java_utils.version}</version>
+    </parent>
 
-  <parent>
-    <groupId>com.jdev</groupId>
-    <artifactId>java_utils</artifactId>
-    <version>${java_utils.version}</version>
-  </parent>
+    <artifactId>demonstrations</artifactId>
+    <version>1.0-22.11.2022</version>
 
-  <artifactId>demonstrations</artifactId>
-  <version>1.0-22.11.2022</version>
+    <name>Demonstrations</name>
 
-  <name>Demonstrations</name>
+    <properties>
+        <common_utils.version>1.1.1-30.11.2022</common_utils.version>
+    </properties>
 
-  <properties>
-    <common_utils.version>1.1.1-30.11.2022</common_utils.version>
-  </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.jdev</groupId>
+            <artifactId>common_utils</artifactId>
+            <version>${common_utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sarxos</groupId>
+            <artifactId>webcam-capture</artifactId>
+        </dependency>
+    </dependencies>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.jdev</groupId>
-      <artifactId>common_utils</artifactId>
-      <version>${common_utils.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.sarxos</groupId>
-      <artifactId>webcam-capture</artifactId>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <finalName>demonstrations</finalName>
- </build>
+    <build>
+        <finalName>demonstrations</finalName>
+    </build>
 </project>

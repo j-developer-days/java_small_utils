@@ -24,7 +24,7 @@
         <java_utils.version>2-12.01.2023</java_utils.version>
     </properties>
 
-    <dependencies/>
+    <dependencies></dependencies>
 
     <build>
         <finalName>java_utils</finalName>
