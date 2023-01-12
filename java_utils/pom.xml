@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>java_utils</artifactId>
-    <version>1.0-16.11.2022</version>
+    <version>${java_utils.version}</version>
     <packaging>pom</packaging>
 
     <name>java_utils(root)</name>
@@ -19,7 +19,9 @@
         <module>useful_utils</module>
     </modules>
 
-    <properties/>
+    <properties>
+        <java_utils.version>1.0-16.11.2022</java_utils.version>
+    </properties>
 
     <dependencies/>
 

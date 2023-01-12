@@ -1,0 +1,21 @@
+Template Pattern
+    https://www.javatpoint.com/template-pattern
+    https://www.tutorialspoint.com/design_pattern/template_pattern.htm
+
+    com.jdev.arrays.SummaryArray.createAndFillArray
+    com.jdev.arrays.SummaryArray.summary
+
+Factory Pattern
+    https://www.tutorialspoint.com/design_pattern/factory_pattern.htm
+    https://www.javatpoint.com/factory-method-design-pattern
+
+    //interface
+    com.jdev.arrays.ArrayInterface.fillArray
+
+    //implementaions
+    com.jdev.arrays.fill.CustomFillArray.fillArray
+    com.jdev.arrays.fill.OrderedArray.fillArray
+    com.jdev.arrays.fill.RandomArray.fillArray
+
+    //factory for create concrete object
+    com.jdev.arrays.fill.FillType

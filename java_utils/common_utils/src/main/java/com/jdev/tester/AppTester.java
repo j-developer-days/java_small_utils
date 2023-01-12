@@ -1,4 +1,4 @@
-package com.jdev;
+package com.jdev.tester;
 
 import lombok.Data;
 
