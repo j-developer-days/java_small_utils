@@ -1,6 +1,7 @@
 package com.jdev.arrays;
 
 import com.jdev.console.ConsoleUtils;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,7 +42,7 @@ class ArrayWorkingITest {
         assertEquals(100, size);
     }
 
-    @Test
+    @RepeatedTest(20)
     void test_createAndFillArray_RANDOM() {
         ArrayWorkingI arrayWorkingI = FillType.RANDOM.getArrayWorkingI();
         assertTrue(arrayWorkingI instanceof RandomArray);
