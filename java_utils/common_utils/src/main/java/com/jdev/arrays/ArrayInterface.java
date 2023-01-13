@@ -27,9 +27,7 @@ public interface ArrayInterface {
     int fillArray();
 
     default void printArray(int[] array) {
-        for (int i = 0; i < array.length; i++) {
-            ConsoleUtils.printToConsole("#" + i + " - " + array[i]);
-        }
+        ArrayPrint.printArray(array);
     }
 
 }

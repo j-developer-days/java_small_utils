@@ -1,4 +1,4 @@
-package com.jdev.algoSearch;
+package com.jdev.algorithms.search;
 
 import com.jdev.util.ArrayUtils;
 
