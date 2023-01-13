@@ -1,2 +1,7 @@
-https://www.geeksforgeeks.org/merge-sort/
-https://favtutor.com/blogs/sorting-algorithms-java
+Sort
+    https://www.geeksforgeeks.org/merge-sort/
+    https://favtutor.com/blogs/sorting-algorithms-java
+
+Heap
+    https://www.geeksforgeeks.org/heap-sort/
+    https://favtutor.com/blogs/sorting-algorithms-java
