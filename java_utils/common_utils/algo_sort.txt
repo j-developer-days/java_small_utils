@@ -5,3 +5,7 @@ Sort
 Heap
     https://www.geeksforgeeks.org/heap-sort/
     https://favtutor.com/blogs/sorting-algorithms-java
+
+Insertion
+    https://favtutor.com/blogs/sorting-algorithms-java
+    https://www.geeksforgeeks.org/insertion-sort/
