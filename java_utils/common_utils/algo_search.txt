@@ -1,3 +1,12 @@
 Linear or Sequential Search is the simplest of search algorithms.
     Linear Search involves sequential searching for an element in the given data structure until either the element is found or the end of the structure is reached.
     If the element is found, we usually just return its position in the data structure. If not, we usually return -1.
+
+Binary or Logarithmic Search is one of the most commonly used search algorithms primarily due to its quick search time.
+    This kind of search uses the Divide and Conquer methodology and requires the data set to be sorted beforehand.
+    It divides the input collection into equal halves, and with each iteration compares the goal element with the element in the middle.
+    If the element is found, the search ends. Else, we continue looking for the element by dividing and selecting the appropriate partition of the array, based on if the goal element is smaller or bigger than the middle element.
+    This is why it's important to have a sorted collection for Binary Search.
+    The search terminates when the firstIndex (our pointer) goes past lastIndex (last element), which implies we have searched the whole array and the element is not present.
+    There are two ways to implement this algorithm - iterative and recursive.
+    There shouldn't be a difference regarding time and space complexity between these two implementations, though this doesn't hold true to all languages.
