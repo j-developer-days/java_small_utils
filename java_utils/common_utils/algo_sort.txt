@@ -9,3 +9,6 @@ Heap
 Insertion
     https://favtutor.com/blogs/sorting-algorithms-java
     https://www.geeksforgeeks.org/insertion-sort/
+
+Selection
+    https://www.geeksforgeeks.org/selection-sort/
