@@ -31,7 +31,7 @@ public class Fibonacci {
     }
 
     public static int dynamic(int n) {
-        int fibonacci[] = new int[n + 2];
+        int[] fibonacci = new int[n + 2];
         fibonacci[0] = 0;
         fibonacci[1] = 1;
 

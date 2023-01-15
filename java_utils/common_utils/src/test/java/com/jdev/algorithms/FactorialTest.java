@@ -1,31 +1,39 @@
 package com.jdev.algorithms;
 
 import com.jdev.console.ConsoleUtils;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class FactorialTest {
 
-    @Test
-    void test_factorial(){
-        ConsoleUtils.printToConsole(Factorial.recursive(0));
-        ConsoleUtils.printToConsole(Factorial.recursive(1));
-        ConsoleUtils.printToConsole(Factorial.recursive(2));
-        ConsoleUtils.printToConsole(Factorial.recursive(5));
-        ConsoleUtils.printToConsole(Factorial.recursive(10));
-        ConsoleUtils.printToConsole(Factorial.recursive(20));
-        ConsoleUtils.printToConsole(Factorial.recursive(20L));
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 5, 10, 15})
+    void test_factorial(int number) {
+        ConsoleUtils.printToConsole(Factorial.recursive(number));
     }
 
-    @Test
-    void test_loop(){
-        ConsoleUtils.printToConsole(Factorial.loop(0));
-        ConsoleUtils.printToConsole(Factorial.loop(1));
-        ConsoleUtils.printToConsole(Factorial.loop(2));
-        ConsoleUtils.printToConsole(Factorial.loop(5));
-        ConsoleUtils.printToConsole(Factorial.loop(10));
-        ConsoleUtils.printToConsole(Factorial.loop(20));
+    @ParameterizedTest
+    @ValueSource(longs = {19, 20})
+    void test_factorial(long number) {
+        ConsoleUtils.printToConsole(Factorial.recursive(number));//2432902008176640000
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 5, 10, 15})
+    void test_loop(int number) {
+        ConsoleUtils.printToConsole(Factorial.loop(number));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 5, 10, 15})
+    void test_loopWhile(int number) {
+        ConsoleUtils.printToConsole(Factorial.loopWhile(number));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 5, 10, 15})
+    void test_loopDoWhile(int number) {
+        ConsoleUtils.printToConsole(Factorial.loopDoWhile(number));
     }
 
 }
