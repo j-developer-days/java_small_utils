@@ -28,4 +28,16 @@ public class ConsoleUtils {
         System.out.println();
     }
 
+    public static void printDelimiter(String text, int count) {
+        printToConsole(StringUtils.multipleStringByCount(text, count));
+    }
+
+    public static void printDelimiterWithString(String text) {
+        printDelimiter(text, -1);
+    }
+
+    public static void printDelimiterWithString(String text, int count) {
+        printDelimiter(text, count);
+    }
+
 }

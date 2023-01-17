@@ -12,14 +12,20 @@ public class StringUtils {
     private static final int DEFAULT_COUNT = 150;
 
     public static String multipleCharByCount(char c, int count) {
-        if (count <= 0) {
-            count = DEFAULT_COUNT;
-        }
-        StringBuilder result = new StringBuilder(count);
-        for (var i = 0; i < count; i++) {
+        int innerCount = checkCount(count);
+        StringBuilder result = new StringBuilder(innerCount);
+        for (var i = 0; i < innerCount; i++) {
             result.append(c);
         }
         return result.toString();
+    }
+
+    public static String multipleStringByCount(String text, int count) {
+        return text.repeat(checkCount(count));
+    }
+
+    private static int checkCount(int count) {
+        return count <= 0 ? DEFAULT_COUNT : count;
     }
 
 }
