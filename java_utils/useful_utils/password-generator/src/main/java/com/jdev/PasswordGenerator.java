@@ -19,6 +19,8 @@ public class PasswordGenerator {
     private PasswordGeneratorLevel passwordGeneratorLevel;
     @Getter
     private Set<Character> characters = new HashSet<>();
+    @Setter
+    private boolean generatePasswordUniqueSymbols;
 
     public String generateRandomPassword() {
         validation();
@@ -26,24 +28,52 @@ public class PasswordGenerator {
         StringBuilder result = new StringBuilder(size);
         final int max = characters.size() - 1;
         List<Character> characters = new ArrayList<>(this.characters);
-        for (var i = 0; i < size; i++) {
-            result.append(characters.get(RandomUtils.randomFromTo(0, max)));
+        if (generatePasswordUniqueSymbols) {
+            int maxIndex = characters.size() - 1;
+            int currentIndex;
+            int internalSize = size;
+            do {
+                currentIndex = RandomUtils.randomFromTo(0, maxIndex);
+                result.append(characters.remove(currentIndex));
+                maxIndex = characters.size() - 1;
+                internalSize--;
+            }
+            while (internalSize > 0);
+        } else {
+            for (var i = 0; i < size; i++) {
+                result.append(characters.get(RandomUtils.randomFromTo(0, max)));
+            }
         }
         return result.toString();
     }
 
     private void validation() {
         if (passwordGeneratorLevel == null || passwordGeneratorLevel == PasswordGeneratorLevel.CUSTOM) {
-            if (size <= 0) {
+            if (size <= 0 && !generatePasswordUniqueSymbols) {
                 size = 8;
             }
         } else {
-            size = passwordGeneratorLevel.getSize();
+            if (generatePasswordUniqueSymbols) {
+                if (size <= 0) {
+                    size = passwordGeneratorLevel.getSize();
+                }
+            } else {
+                size = passwordGeneratorLevel.getSize();
+            }
             fillCharacters();
         }
 
+        if (generatePasswordUniqueSymbols) {
+            if (size <= 0) {
+                throw new RuntimeException("You need to specify size!");
+            }
+            if (size > characters.size()) {
+                throw new RuntimeException("You set size - " + size + ", but max you can - " + characters.size() + "!");
+            }
+        }
+
         if (characters.isEmpty()) {
-            throw new RuntimeException("We need to add characters!");
+            throw new RuntimeException("You need to add characters!");
         }
     }
 
