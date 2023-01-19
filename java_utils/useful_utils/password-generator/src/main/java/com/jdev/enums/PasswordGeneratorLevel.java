@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum PasswordGeneratorLevel {
     CUSTOM(0, null),
+    UUID(36, new PasswordGeneratorCharacterType[]{PasswordGeneratorCharacterType.SPECIAL_CHARACTERS}),
     EASY_LEVEL0(8, new PasswordGeneratorCharacterType[]{PasswordGeneratorCharacterType.NUMBERS}),
     EASY_LEVEL1(10,
             new PasswordGeneratorCharacterType[]{PasswordGeneratorCharacterType.ENGLISH_LETTERS_LOWER_CASE_ONLY}),

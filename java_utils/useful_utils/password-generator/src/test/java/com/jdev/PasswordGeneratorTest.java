@@ -115,7 +115,7 @@ class PasswordGeneratorTest {
         assertEquals(size, password.length());
     }
 
-    @EnumSource(value = PasswordGeneratorLevel.class, mode = EnumSource.Mode.EXCLUDE, names = {"CUSTOM"})
+    @EnumSource(value = PasswordGeneratorLevel.class, mode = EnumSource.Mode.EXCLUDE, names = {"CUSTOM", "UUID"})
     @ParameterizedTest
     void test_generateRandomPassword_ExcludeCustom(PasswordGeneratorLevel passwordGeneratorLevel) {
         PasswordGenerator passwordGenerator = new PasswordGenerator();
@@ -124,6 +124,42 @@ class PasswordGeneratorTest {
         String password = passwordGenerator.generateRandomPassword();
         ConsoleUtils.printToConsole(password);
         assertEquals(passwordGeneratorLevel.getSize(), password.length());
+    }
+
+    @Test
+    void test_generateRandomPassword_UUIDType() {
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        passwordGenerator.setPasswordGeneratorLevel(PasswordGeneratorLevel.UUID);
+
+        String password = passwordGenerator.generateRandomPassword();
+        ConsoleUtils.printToConsole(password);
+        assertEquals(36, password.length());
+        for (int i = password.length() - 1; i >= 0; i--) {
+            char c = password.charAt(i);
+            if (Character.isAlphabetic(c)) {
+                assertTrue(Character.isLowerCase(c));
+            }
+        }
+    }
+
+    @Test
+    void test_generateRandomPassword_UUIDTypeUuidTurnOnAndRandomlyChangeLowerToUpperCase() {
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        passwordGenerator.setPasswordGeneratorLevel(PasswordGeneratorLevel.UUID);
+        passwordGenerator.setUuidTurnOnAndRandomlyChangeLowerToUpperCase(true);
+
+        String password = passwordGenerator.generateRandomPassword();
+        ConsoleUtils.printToConsole(password);
+        assertEquals(36, password.length());
+        int count = 0;
+        for (int i = password.length() - 1; i >= 0; i--) {
+            char c = password.charAt(i);
+            if (Character.isAlphabetic(c) && Character.isUpperCase(c)) {
+                count++;
+            }
+        }
+        ConsoleUtils.printToConsole(count);
+        assertTrue(count > 0);
     }
 
 

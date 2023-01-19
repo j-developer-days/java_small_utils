@@ -81,4 +81,16 @@ class ArrayInterfaceTest {
         customFillArray.summary(10);
     }
 
+    @Test
+    void test_createAndFillArray_CUSTOM_WithStartBefore() {
+        ArrayInterface arrayInterface = FillType.CUSTOM.getArrayInterface();
+        assertTrue(arrayInterface instanceof CustomFillArray);
+        CustomFillArray customFillArray = (CustomFillArray) arrayInterface;
+        customFillArray.setStartValue(8);
+        customFillArray.setStartBefore(true);
+        customFillArray.setFunction(integer -> integer + 5);
+
+        customFillArray.summary(4);
+    }
+
 }
