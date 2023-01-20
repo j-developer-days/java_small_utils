@@ -72,9 +72,10 @@ class ArrayWorkingITest {
         ArrayWorkingI arrayWorkingI = FillType.CUSTOM.getArrayWorkingI();
         assertTrue(arrayWorkingI instanceof CustomFillArray);
         CustomFillArray customFillArray = (CustomFillArray) arrayWorkingI;
-        customFillArray.setStartValue(0);
-        customFillArray.setFunction(integer -> integer + 11);
+        customFillArray.setStartValue(8);
+        customFillArray.setFunction(integer -> integer + 5);
+        customFillArray.setStartBefore(true);
 
-        customFillArray.summary(10);
+        customFillArray.summary(4);
     }
 }

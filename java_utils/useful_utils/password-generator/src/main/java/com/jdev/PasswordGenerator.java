@@ -1,15 +1,13 @@
 package com.jdev;
 
+import com.jdev.arrays.CustomFillArray;
 import com.jdev.enums.PasswordGeneratorCharacterType;
 import com.jdev.enums.PasswordGeneratorLevel;
 import com.jdev.util.RandomUtils;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PasswordGenerator {
 
@@ -21,27 +19,54 @@ public class PasswordGenerator {
     private Set<Character> characters = new HashSet<>();
     @Setter
     private boolean generatePasswordUniqueSymbols;
+    @Setter
+    private boolean uuidTurnOnAndRandomlyChangeLowerToUpperCase;
 
     public String generateRandomPassword() {
         validation();
 
         StringBuilder result = new StringBuilder(size);
-        final int max = characters.size() - 1;
+        final int lastIndex = characters.size() - 1;
         List<Character> characters = new ArrayList<>(this.characters);
-        if (generatePasswordUniqueSymbols) {
-            int maxIndex = characters.size() - 1;
-            int currentIndex;
-            int internalSize = size;
-            do {
-                currentIndex = RandomUtils.randomFromTo(0, maxIndex);
-                result.append(characters.remove(currentIndex));
-                maxIndex = characters.size() - 1;
-                internalSize--;
+        if (passwordGeneratorLevel == PasswordGeneratorLevel.UUID) {
+            result.append(UUID.randomUUID().toString());
+
+            CustomFillArray customFillArray = new CustomFillArray();
+            customFillArray.setStartValue(8);
+            customFillArray.setFunction(integer -> integer + 5);
+            customFillArray.setStartBefore(true);
+            int[] startIndexes = customFillArray.createAndFillArray(4);
+
+            for (int startIndex : startIndexes) {
+                changeMinusSignInUuid(characters, startIndex, result, lastIndex);
             }
-            while (internalSize > 0);
+
+            if (uuidTurnOnAndRandomlyChangeLowerToUpperCase) {
+                for (int i = result.length() - 1; i >= 0; i--) {
+                    if (RandomUtils.getRandom().nextBoolean()) {
+                        char c = result.charAt(i);
+                        if (Character.isAlphabetic(c)) {
+                            result.replace(i, i + 1, Character.toUpperCase(c) + "");
+                        }
+                    }
+                }
+            }
         } else {
-            for (var i = 0; i < size; i++) {
-                result.append(characters.get(RandomUtils.randomFromTo(0, max)));
+            if (generatePasswordUniqueSymbols) {
+                int charactersCountOfIndexes = characters.size() - 1;
+                int currentIndex;
+                int internalSize = size;
+                do {
+                    currentIndex = RandomUtils.randomFromTo(0, charactersCountOfIndexes);
+                    result.append(characters.remove(currentIndex));
+                    charactersCountOfIndexes = characters.size() - 1;
+                    internalSize--;
+                }
+                while (internalSize > 0);
+            } else {
+                for (var i = 0; i < size; i++) {
+                    result.append(characters.get(RandomUtils.randomFromTo(0, lastIndex)));
+                }
             }
         }
         return result.toString();
@@ -82,6 +107,13 @@ public class PasswordGenerator {
         PasswordGeneratorCharacterType[] passwordGeneratorCharacterTypes = passwordGeneratorLevel.getPasswordGeneratorCharacterTypes();
         for (PasswordGeneratorCharacterType passwordGeneratorCharacterTypeLocal : passwordGeneratorCharacterTypes) {
             characters.addAll(passwordGeneratorCharacterTypeLocal.getCharacters());
+        }
+    }
+
+    private void changeMinusSignInUuid(List<Character> characters, int index, StringBuilder result, int lastIndex) {
+        Character character = characters.get(RandomUtils.randomFromTo(0, lastIndex));
+        if (character != '-') {
+            result.replace(index, index + 1, character.toString());
         }
     }
 

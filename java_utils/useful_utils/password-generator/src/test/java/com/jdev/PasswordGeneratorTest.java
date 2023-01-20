@@ -11,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -122,6 +123,47 @@ class PasswordGeneratorTest {
             ConsoleUtils.printToConsole(character + StringUtils.TAB + integer);
             assertEquals(1, integer);
         });
+    }
+
+    @Test
+    void test_generateRandomPassword_UUIDType() {
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        passwordGenerator.setPasswordGeneratorLevel(PasswordGeneratorLevel.UUID);
+
+        String password = passwordGenerator.generateRandomPassword();
+        ConsoleUtils.printToConsole(password);
+        assertEquals(36, password.length());
+        int countOfDelimiters = 0;
+        for (int i = password.length() - 1; i >= 0; i--) {
+            char c = password.charAt(i);
+            if (Character.isAlphabetic(c)) {
+                assertTrue(Character.isLowerCase(c));
+            }
+            if(!Character.isLetterOrDigit(c) && passwordGenerator.getCharacters().contains(c)){
+                countOfDelimiters++;
+            }
+        }
+        assertEquals(4, countOfDelimiters);
+    }
+
+    @Test
+    void test_generateRandomPassword_UUIDTypeUuidTurnOnAndRandomlyChangeLowerToUpperCase() {
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+        passwordGenerator.setPasswordGeneratorLevel(PasswordGeneratorLevel.UUID);
+        passwordGenerator.setUuidTurnOnAndRandomlyChangeLowerToUpperCase(true);
+
+        String password = passwordGenerator.generateRandomPassword();
+        ConsoleUtils.printToConsole(password);
+        assertEquals(36, password.length());
+        int count = 0;
+        for (int i = password.length() - 1; i >= 0; i--) {
+            char c = password.charAt(i);
+            if (Character.isAlphabetic(c) && Character.isUpperCase(c)) {
+                count++;
+            }
+        }
+        ConsoleUtils.printToConsole(count);
+        assertTrue(count > 0);
     }
 
 }
