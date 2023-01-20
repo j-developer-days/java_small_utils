@@ -1,5 +1,7 @@
 package com.jdev.algorithms;
 
+import com.jdev.console.ConsoleUtils;
+import com.jdev.tester.MeasureWorkingTime;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -18,8 +20,20 @@ class CheckBracketsTest {
     @CsvSource({"{}", "{}[]", "[]{}()"})
     @ParameterizedTest
     void test_checkBrackets_trueResult(String input) {
-        assertTrue(CheckBrackets.checkBracketWithStack(input));
-        assertTrue(CheckBrackets.checkBracket(input));
+        MeasureWorkingTime measureWorkingTime = new MeasureWorkingTime();
+
+        measureWorkingTime.beginNanoSeconds();
+        boolean b = CheckBrackets.checkBracketWithStack(input);
+        measureWorkingTime.endNanoSeconds();
+        ConsoleUtils.printToConsole("checkBracketWithStack - " + measureWorkingTime.differenceNanoSeconds());
+
+        assertTrue(b);
+
+        measureWorkingTime.beginNanoSeconds();
+        b = CheckBrackets.checkBracket(input);
+        measureWorkingTime.endNanoSeconds();
+        ConsoleUtils.printToConsole("checkBracket - " + measureWorkingTime.differenceNanoSeconds());
+        assertTrue(b);
     }
 
 }
