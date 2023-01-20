@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -13,7 +14,11 @@
 
     <name>db-performance</name>
 
-    <properties></properties>
+    <properties>
+        <liquibase.file.name.current>${liquibase.file.name.db_performance}</liquibase.file.name.current>
+        <liquibase.file.name.db_performance>db_performance</liquibase.file.name.db_performance>
+        <liquibase.file.name.for_root>root</liquibase.file.name.for_root>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -30,7 +35,7 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <configuration>
-                    <propertyFile>${project.build.directory}/classes/liquibase.properties</propertyFile>
+                    <propertyFile>${project.build.directory}/classes/liquibase-${liquibase.file.name.current}.properties</propertyFile>
                 </configuration>
             </plugin>
         </plugins>
@@ -38,4 +43,25 @@
     </build>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
+
+    <profiles>
+
+        <profile>
+            <id>root-db</id>
+            <properties>
+                <liquibase.file.name.current>${liquibase.file.name.for_root}</liquibase.file.name.current>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>db_performance</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <liquibase.file.name.current>${liquibase.file.name.db_performance}</liquibase.file.name.current>
+            </properties>
+        </profile>
+
+    </profiles>
 </project>
