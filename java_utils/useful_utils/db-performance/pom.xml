@@ -18,13 +18,45 @@
         <liquibase.file.name.current>${liquibase.file.name.db_performance}</liquibase.file.name.current>
         <liquibase.file.name.db_performance>db_performance</liquibase.file.name.db_performance>
         <liquibase.file.name.for_root>root</liquibase.file.name.for_root>
+        <common_utils.version>4-20.01.2023</common_utils.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.jdev</groupId>
+            <artifactId>common_utils</artifactId>
+            <version>${common_utils.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
