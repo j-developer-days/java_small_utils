@@ -12,8 +12,6 @@ import java.sql.Statement;
 
 public class PostgresqlTransactionAutoCommitTest {
 
-    private Statement statement;
-
     static void getCount(Statement statement, int expected) throws SQLException {
         final ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM t_users_pk_int");
         int count = -1;
@@ -24,21 +22,6 @@ public class PostgresqlTransactionAutoCommitTest {
         ConsoleUtils.printToConsole("select count is - " + count);
         if (expected != -1) {
             Assertions.assertEquals(expected, count);
-        }
-    }
-
-    @AfterEach
-    private void afterEach_for_CheckCount() throws SQLException {
-        if (statement != null && !statement.isClosed()) {
-            statement.close();
-        }
-        ConnectionSql.closeConnection();
-
-        try (Connection connection = ConnectionSql.getConnection();) {
-            Statement statement = connection.createStatement();
-            getCount(statement, -1);
-        } catch (SQLException e) {
-            ConsoleUtils.logError("postgresql connection exception!", e);
         }
     }
 
@@ -76,16 +59,22 @@ public class PostgresqlTransactionAutoCommitTest {
     @Test
     void test_autoCommitWith_error_in_the_end() throws SQLException {
         Connection connection = ConnectionSql.getConnection();
-        this.statement = connection.createStatement();
+        Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-22100, 'MATLAB');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-20157, 'Go!');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-5860, 'Object Lisp');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-13814, 'LiveScript');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-31599, 'Erlang');");
-        statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-31599, 'ErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlang');--here is problem");
-
-        statement.close();
-        ConnectionSql.closeConnection();
+        try {
+            statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-31599, " +
+                    "'ErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlang');--here is problem");
+        } catch (SQLException e) {
+            return;
+        } finally {
+            getCount(statement, 5);
+            statement.close();
+            ConnectionSql.closeConnection();
+        }
     }
 
     /**
@@ -94,16 +83,21 @@ public class PostgresqlTransactionAutoCommitTest {
     @Test
     void test_autoCommit_sql_with_error_in_the_middle() throws SQLException {
         Connection connection = ConnectionSql.getConnection();
-        this.statement = connection.createStatement();
+        Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-22100, 'MATLAB');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-20157, 'Go!');");
-        statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-31599, 'ErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlang');--here is problem");
+        SQLException exception = Assertions.assertThrows(SQLException.class, () -> statement.executeUpdate("INSERT INTO " +
+                "t_users_pk_int (id, " +
+                "firstname) VALUES (-31599, 'ErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlang');--here is problem"));
+        if (exception != null) {
+            getCount(statement, 2);
+            statement.close();
+            ConnectionSql.closeConnection();
+            return;
+        }
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-5860, 'Object Lisp');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-13814, 'LiveScript');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-31599, 'Erlang');");
-
-        statement.close();
-        ConnectionSql.closeConnection();
     }
 
     /**
