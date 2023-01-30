@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * the same from - transactions.sql
+ * the same from - success_transactions.sql
  */
 public class PostgresqlTransactionTest {
 

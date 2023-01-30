@@ -7,6 +7,7 @@ import com.jdev.file.PropertiesFileUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class ConnectionSql {
@@ -37,6 +38,16 @@ public class ConnectionSql {
         } catch (SQLException e) {
             ConsoleUtils.logError("connection with db problem", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void closeStatement(Statement statement) {
+        try {
+            if (statement != null && !statement.isClosed()) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            ConsoleUtils.logError("Close statement!", e);
         }
     }
 
