@@ -45,6 +45,7 @@ public class PostgresqlTransactionErrorTest {
             connection.setAutoCommit(false);
             statement = connection.createStatement();
             ConsoleUtils.printToConsole("deleted - " + statement.executeUpdate("DELETE FROM t_users_pk_int;"));
+            connection.commit();
         } catch (SQLException e) {
             ConsoleUtils.logError("postgresql connection exception!", e);
             if (e.getMessage().contains("current transaction is aborted")) {

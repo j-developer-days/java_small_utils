@@ -269,7 +269,7 @@ BEGIN;
     SAVEPOINT savepoint1;
     
    	INSERT INTO t_users_pk_int(firstname) VALUES ('MySQL8');
-   	select pg_sleep(5);
+   	SELECT pg_sleep(5);
    	RELEASE SAVEPOINT savepoint1;
    	SELECT * FROM t_users_pk_int;
 COMMIT;
@@ -310,11 +310,11 @@ BEGIN;
 	    ROLLBACK TO SAVEPOINT savepoint1;
 	    SELECT * FROM t_users_pk_int;               -- shows rows Postgresql15 and Postgresql14
 	
-	    -- rollback to the first savepoint
+	    -- rollback to the again second savepoint
 	    ROLLBACK TO SAVEPOINT savepoint1;
 	    SELECT * FROM t_users_pk_int;               -- shows only row Postgresql15 and Postgresql14
-	ROLLBACK;
---	COMMIT;
+--	ROLLBACK;
+	COMMIT;
 	SELECT * FROM t_users_pk_int;--empty if ROLLBACK
 END;
 ---------------------------------------------------------------------------------------------------------
@@ -341,8 +341,8 @@ BEGIN;
 	    -- rollback to the first savepoint
 	    ROLLBACK TO SAVEPOINT savepoint1;
 	    SELECT * FROM t_users_pk_int;               -- shows only row Postgresql15
---	ROLLBACK;
-	COMMIT;
+	ROLLBACK;
+--	COMMIT;
 	SELECT * FROM t_users_pk_int;--empty if ROLLBACK
 END;
 ---------------------------------------------------------------------------------------------------------
