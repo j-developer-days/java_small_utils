@@ -100,4 +100,25 @@ public class PostgresqlTransactionErrorTest {
         statement.close();
         ConnectionSql.closeConnection();
     }
+
+    /**
+     * --source - transation_mode_readOnly.sql
+     */
+    @Test
+    void test_readOnly() throws SQLException {
+        Connection connection = ConnectionSql.getConnection();
+        connection.setAutoCommit(false);
+        connection.setReadOnly(true);
+        Statement statement = connection.createStatement();
+        SQLException exception = Assertions.assertThrows(SQLException.class, () -> statement.executeUpdate(
+                "INSERT INTO t_users_pk_int (id, firstname) VALUES (27169, 'JAVA');"));
+        if (exception != null) {
+            Assertions.assertTrue(exception.getMessage().equals("ERROR: cannot execute INSERT in a read-only transaction"));
+            Assertions.assertEquals("25006", exception.getSQLState());
+            connection.rollback();
+            PostgresqlTransactionAutoCommitTest.getCount(statement, 0);
+        }
+        statement.close();
+        ConnectionSql.closeConnection();
+    }
 }
