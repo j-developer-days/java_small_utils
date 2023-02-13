@@ -14,10 +14,12 @@ import java.sql.Statement;
  */
 public class PostgresqlTransactionTest {
 
+    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+
     @BeforeEach
     @AfterEach
     private void forDelete() {
-        try (Connection connection = ConnectionSql.getConnection();) {
+        try (Connection connection = connectionSql.getConnection();) {
             Statement statement = connection.createStatement();
             ConsoleUtils.printToConsole("deleted - " + statement.executeUpdate("DELETE FROM t_users_pk_int;"));
         } catch (SQLException e) {
@@ -30,7 +32,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_commit() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (27169, 'C#');");
@@ -39,7 +41,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 2);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -47,7 +49,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_commitAndChainCommit() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (27169, 'C#');");
@@ -59,7 +61,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 3);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -67,7 +69,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_commitAndChainRollback() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (27169, 'C#');");
@@ -79,7 +81,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 2);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -87,7 +89,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_rollbackAndChainCommit() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (27169, 'C#');");
@@ -99,7 +101,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 1);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -107,7 +109,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_rollbackAndChainRollback() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (27169, 'C#');");
@@ -119,7 +121,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 0);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -128,7 +130,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_commitAndCommit() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (27169, 'C#');");
@@ -140,7 +142,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 3);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -148,7 +150,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_rollback() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (27169, 'C#');");
@@ -157,7 +159,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 0);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -165,7 +167,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_commitAndRollback() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("DELETE FROM t_users_pk_int;");
@@ -176,7 +178,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 0);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -184,7 +186,7 @@ public class PostgresqlTransactionTest {
      */
     @Test
     void test_rollbackAndCommit() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
         statement.executeUpdate("DELETE FROM t_users_pk_int;");
@@ -195,7 +197,7 @@ public class PostgresqlTransactionTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 2);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
 }

@@ -12,6 +12,8 @@ import java.sql.Statement;
 
 public class PostgresqlTransactionAutoCommitTest {
 
+    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+
     static void getCount(Statement statement, int expected) throws SQLException {
         final ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM t_users_pk_int");
         int count = -1;
@@ -27,7 +29,7 @@ public class PostgresqlTransactionAutoCommitTest {
 
     @AfterEach
     private void afterEach_forDelete() {
-        try (Connection connection = ConnectionSql.getConnection();) {
+        try (Connection connection = connectionSql.getConnection();) {
             Statement statement = connection.createStatement();
             ConsoleUtils.printToConsole("deleted - " + statement.executeUpdate("DELETE FROM t_users_pk_int;"));
         } catch (SQLException e) {
@@ -40,7 +42,7 @@ public class PostgresqlTransactionAutoCommitTest {
      */
     @Test
     void test_autoCommit() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-22100, 'MATLAB');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-20157, 'Go!');");
@@ -50,7 +52,7 @@ public class PostgresqlTransactionAutoCommitTest {
 
         getCount(statement, 5);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -58,7 +60,7 @@ public class PostgresqlTransactionAutoCommitTest {
      */
     @Test
     void test_autoCommitWith_error_in_the_end() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-22100, 'MATLAB');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-20157, 'Go!');");
@@ -69,11 +71,11 @@ public class PostgresqlTransactionAutoCommitTest {
             statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-31599, " +
                     "'ErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlangErlang');--here is problem");
         } catch (SQLException e) {
-            return;
+            ConsoleUtils.logError("statement update error", e);
         } finally {
             getCount(statement, 5);
             statement.close();
-            ConnectionSql.closeConnection();
+            SqlHelper.closeConnection(connection);
         }
     }
 
@@ -82,7 +84,7 @@ public class PostgresqlTransactionAutoCommitTest {
      */
     @Test
     void test_autoCommit_sql_with_error_in_the_middle() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-22100, 'MATLAB');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-20157, 'Go!');");
@@ -92,7 +94,7 @@ public class PostgresqlTransactionAutoCommitTest {
         if (exception != null) {
             getCount(statement, 2);
             statement.close();
-            ConnectionSql.closeConnection();
+            SqlHelper.closeConnection(connection);
             return;
         }
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-5860, 'Object Lisp');");
@@ -105,7 +107,7 @@ public class PostgresqlTransactionAutoCommitTest {
      */
     @Test
     void test_autoCommit_sql_with_error_in_the_middle2() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-22100, 'MATLAB');");
         statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (-20157, 'Go!');");
@@ -120,7 +122,7 @@ public class PostgresqlTransactionAutoCommitTest {
 
         getCount(statement, 5);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
 }

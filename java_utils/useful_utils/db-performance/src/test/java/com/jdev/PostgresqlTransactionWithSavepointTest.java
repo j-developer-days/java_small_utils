@@ -17,13 +17,15 @@ import java.sql.Statement;
  */
 public class PostgresqlTransactionWithSavepointTest {
 
+    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+
     @BeforeEach
     @AfterEach
     private void forDelete() throws SQLException {
         Statement statement = null;
         Connection connection = null;
         try {
-            connection = ConnectionSql.getConnection();
+            connection = connectionSql.getConnection();
             connection.setAutoCommit(false);
             statement = connection.createStatement();
             ConsoleUtils.printToConsole("deleted - " + statement.executeUpdate("DELETE FROM t_users_pk_int;"));
@@ -34,8 +36,8 @@ public class PostgresqlTransactionWithSavepointTest {
                 connection.rollback();
             }
         } finally {
-            ConnectionSql.closeConnection();
-            ConnectionSql.closeStatement(statement);
+            SqlHelper.closeConnection(connection);
+            SqlHelper.closeStatement(statement);
         }
     }
 
@@ -44,7 +46,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_SavepointAndRollbackToSavepoint() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -59,7 +61,7 @@ public class PostgresqlTransactionWithSavepointTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 2);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -67,7 +69,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_2SavepointsWithTheSameNamesAndRollbackToSavepoint() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -85,7 +87,7 @@ public class PostgresqlTransactionWithSavepointTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 3);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -93,7 +95,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_2SavepointsWithTheSameNamesAndRollbackToSavepointAndReleaseIt() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -112,7 +114,7 @@ public class PostgresqlTransactionWithSavepointTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 3);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -120,7 +122,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_SavepointAndRollbackToSavepointAndReleaseIt() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -138,7 +140,7 @@ public class PostgresqlTransactionWithSavepointTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 2);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -146,7 +148,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_SavepointAndRollbackToSavepointAnd2TimesReleaseIt() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -170,7 +172,7 @@ public class PostgresqlTransactionWithSavepointTest {
         }
 
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -178,7 +180,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_SavepointAnd2TimesReleaseIt() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -201,7 +203,7 @@ public class PostgresqlTransactionWithSavepointTest {
         }
 
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -209,7 +211,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_SavepointAndReleaseItCommitTransaction() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -226,7 +228,7 @@ public class PostgresqlTransactionWithSavepointTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 4);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -234,7 +236,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_SavepointAndReleaseItAndRollbackTransaction() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -251,7 +253,7 @@ public class PostgresqlTransactionWithSavepointTest {
 
         PostgresqlTransactionAutoCommitTest.getCount(statement, 0);
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -259,7 +261,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_SavepointAndReleaseItAndRollbackToSavepoint() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -281,7 +283,7 @@ public class PostgresqlTransactionWithSavepointTest {
 //        statement.executeUpdate("INSERT INTO t_users_pk_int(firstname) VALUES ('MySQL');");
 
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -289,7 +291,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_2SavepointsTheSameNamesAndRollbackToSavepointAfterReleaseToSavepointAndAgainRollbackToSavepoint() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -307,7 +309,7 @@ public class PostgresqlTransactionWithSavepointTest {
         PostgresqlTransactionAutoCommitTest.getCount(statement, 1);
 
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -315,7 +317,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_SavepointWithThreadSleep() throws SQLException, InterruptedException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         Statement statement = connection.createStatement();
 
@@ -330,7 +332,7 @@ public class PostgresqlTransactionWithSavepointTest {
         PostgresqlTransactionAutoCommitTest.getCount(statement, 2);
 
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -351,7 +353,7 @@ public class PostgresqlTransactionWithSavepointTest {
         sqlStatement.append("SELECT * FROM t_users_pk_int;").append(StringUtils.LF);
         sqlStatement.append("COMMIT;").append(StringUtils.LF);
 
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
 
         Statement statement = connection.createStatement();
@@ -361,7 +363,7 @@ public class PostgresqlTransactionWithSavepointTest {
         PostgresqlTransactionAutoCommitTest.getCount(statement, 2);
 
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
     /**
@@ -369,7 +371,7 @@ public class PostgresqlTransactionWithSavepointTest {
      */
     @Test
     void test_Error_25P01() throws SQLException {
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
 
         Statement statement = connection.createStatement();
@@ -388,6 +390,6 @@ public class PostgresqlTransactionWithSavepointTest {
         PostgresqlTransactionAutoCommitTest.getCount(statement, 2);
 
         statement.close();
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 }

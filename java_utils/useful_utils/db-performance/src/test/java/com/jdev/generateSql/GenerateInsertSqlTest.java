@@ -1,6 +1,7 @@
 package com.jdev.generateSql;
 
 import com.jdev.ConnectionSql;
+import com.jdev.SqlHelper;
 import com.jdev.TestHelper;
 import com.jdev.console.ConsoleUtils;
 import org.junit.jupiter.api.Assertions;
@@ -12,21 +13,25 @@ import java.util.ArrayList;
 
 class GenerateInsertSqlTest {
 
+    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+
     @BeforeEach
     private void beforeEach() {
-        try (Connection connection = ConnectionSql.getConnection();) {
+        try (Connection connection = connectionSql.getConnection()) {
+            connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM t_users_pk_int");
             int count = preparedStatement.executeUpdate();
+            connection.commit();
             ConsoleUtils.printToConsole("deleted - " + count);
         } catch (SQLException e) {
-            e.printStackTrace();
+            ConsoleUtils.logError("db connection", e);
         }
     }
 
     @Test
     void test_simpleGeneratorInsertIntoSql() throws SQLException {
         Connection connectionInner = null;
-        try (Connection connection = ConnectionSql.getConnection();) {
+        try (Connection connection = connectionSql.getConnection();) {
             connection.setAutoCommit(false);
 
             String queryInsert = GenerateInsertSql.simpleGeneratorInsertIntoSql("t_users_pk_int",
@@ -85,7 +90,7 @@ class GenerateInsertSqlTest {
                 }}, 2);
         ConsoleUtils.printToConsole(queryInsertBad);
 
-        try (Connection connection = ConnectionSql.getConnection();) {
+        try (Connection connection = connectionSql.getConnection();) {
             PreparedStatement preparedStatement = connection.prepareStatement(queryInsert);
             int count = preparedStatement.executeUpdate();
             ConsoleUtils.printToConsole("inserted - " + count);
@@ -121,7 +126,7 @@ class GenerateInsertSqlTest {
                     add(ColumnDetails.builder().columnName("firstname").addQuotationMark(true).generateColumnValue(s -> GenerateInsertSql.FAKER.name().firstName()).build());
                 }}, 20, true);
 
-        try (Connection connection = ConnectionSql.getConnection();) {
+        try (Connection connection = connectionSql.getConnection();) {
             PreparedStatement preparedStatement = connection.prepareStatement(queryInsert);
             int count = preparedStatement.executeUpdate();
 
@@ -167,7 +172,7 @@ class GenerateInsertSqlTest {
                     add(ColumnDetails.builder().columnName("firstname").addQuotationMark(true).generateColumnValue(s -> GenerateInsertSql.FAKER.name().firstName()).build());
                 }}, 20, true);
 
-        try (Connection connection = ConnectionSql.getConnection();) {
+        try (Connection connection = connectionSql.getConnection();) {
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(queryInsert);
             int count = preparedStatement.executeUpdate();
@@ -200,7 +205,7 @@ class GenerateInsertSqlTest {
                     add(ColumnDetails.builder().columnName("firstname").addQuotationMark(true).generateColumnValue(s -> GenerateInsertSql.FAKER.name().firstName()).build());
                 }}, 20, true);
 
-        Connection connection = ConnectionSql.getConnection();
+        Connection connection = connectionSql.getConnection();
         connection.setAutoCommit(false);
         connection.setReadOnly(false);
         PreparedStatement preparedStatement = connection.prepareStatement(queryInsert);
@@ -224,7 +229,7 @@ class GenerateInsertSqlTest {
             resultSet.close();
         }
 
-        ConnectionSql.closeConnection();
+        SqlHelper.closeConnection(connection);
     }
 
 }

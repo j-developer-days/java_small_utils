@@ -18,7 +18,7 @@
         <liquibase.file.name.current>${liquibase.file.name.db_performance}</liquibase.file.name.current>
         <liquibase.file.name.db_performance>db_performance</liquibase.file.name.db_performance>
         <liquibase.file.name.for_root>root</liquibase.file.name.for_root>
-        <common_utils.version>4-20.01.2023</common_utils.version>
+        <common_utils.version>6-13.02.2023</common_utils.version>
     </properties>
 
     <dependencies>
