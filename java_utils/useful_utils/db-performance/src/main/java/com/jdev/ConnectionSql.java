@@ -41,17 +41,18 @@ public class ConnectionSql {
     }
 
     private static ConnectionSql getInstanceInner(boolean withSleep) {
-        if (instance == null) {
-            instance = new ConnectionSql();
-            if (withSleep) {
-                ThreadUtils.sleepThreadInSeconds(3);
+        synchronized (ConnectionSql.class) {
+            if (instance == null) {
+                instance = new ConnectionSql();
+                if (withSleep) {
+                    ThreadUtils.sleepThreadInSeconds(3);
+                }
+                instance.uuid = UUID.randomUUID().toString();
+                ConsoleUtils.printToConsole(ThreadUtils.getCurrentThreadName() + StringUtils.TAB + StringUtils.TAB +
+                        "uuid - " + instance.uuid);
             }
-            instance.uuid = UUID.randomUUID().toString();
-            ConsoleUtils.printToConsole(ThreadUtils.getCurrentThreadName() + StringUtils.TAB + StringUtils.TAB +
-                    "uuid - " + instance.uuid);
+            return instance;
         }
-        ConsoleUtils.printToConsole(ThreadUtils.getCurrentThreadName() + StringUtils.TAB + "ONLY GET");
-        return instance;
     }
 
     public Connection getConnection() {
