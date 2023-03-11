@@ -91,7 +91,7 @@ class ConnectionSqlTest {
     @Test
     void test_Runnable() {
         Runnable runnable = () -> {
-            ConnectionSql connectionSql = ConnectionSql.getInstance();
+            ConnectionSql connectionSql = ConnectionSql.getInstanceWithSleep();
             try (Connection connection = connectionSql.getConnection()) {
                 connection.setAutoCommit(false);
                 Statement statement = connection.createStatement();
@@ -146,7 +146,7 @@ class ConnectionSqlTest {
 
     @Test
     void test_ExecutorService() throws InterruptedException {
-        ExecutorService es = Executors.newCachedThreadPool();
+        ExecutorService es = Executors.newFixedThreadPool(5);
         for (int i = 0; i < 50; i++) {
             es.execute(new ThreadInsert("T" + i, i, "Name" + i));
         }
@@ -172,21 +172,23 @@ class ConnectionSqlTest {
         public ThreadInsert(String name, Integer id, String firstName) {
             super(name);
             this.id = id;
-            this.firstName = firstName;
+            this.firstName = firstName + "\t" + name;
         }
 
         @Override
         public void run() {
-            ConnectionSql connectionSql = ConnectionSql.getInstance();
+            ConnectionSql connectionSql = ConnectionSql.getInstanceWithSleep();
             try (Connection connection = connectionSql.getConnection()) {
                 connection.setAutoCommit(false);
                 Statement statement = connection.createStatement();
-                statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES (" + this.id + ", '"
-                        + this.firstName + "');");
+                statement.executeUpdate("INSERT INTO t_users_pk_int (id, firstname) VALUES ("
+                        + this.id + ", '" + this.firstName + "');");
                 connection.commit();
                 SqlHelper.closeStatement(statement);
+                ConsoleUtils.printToConsole("Success saved - " + this.id + "[" + ThreadUtils.getCurrentThreadName() + "]");
             } catch (SQLException e) {
-                ConsoleUtils.logError("Connection problem inner thread!", e);
+                ConsoleUtils.logError("Connection problem inner thread! - ["
+                        + ThreadUtils.getCurrentThreadName() + "]", e);
             }
         }
     }

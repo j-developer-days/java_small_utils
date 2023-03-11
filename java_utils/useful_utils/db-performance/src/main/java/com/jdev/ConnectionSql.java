@@ -4,6 +4,7 @@ import com.jdev.console.ConsoleUtils;
 import com.jdev.file.FileResource;
 import com.jdev.file.PropertiesFileUtils;
 import com.jdev.thread.ThreadUtils;
+import com.jdev.util.RandomUtils;
 import com.jdev.util.StringUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -22,7 +24,7 @@ public class ConnectionSql {
     private static Properties properties;
     private static ConnectionSql instance;
     @Getter
-    private String uuid;
+    private volatile String uuid;
 
     private static Properties getProperties() {
         if (properties == null) {
@@ -32,27 +34,27 @@ public class ConnectionSql {
         return properties;
     }
 
-    public static ConnectionSql getInstance() {
+    public static synchronized ConnectionSql getInstanceThreadSafe() {
         return getInstanceInner(false);
     }
 
-    public static ConnectionSql getInstanceWithSleep() {
+    public static synchronized ConnectionSql getInstanceWithSleepThreadSafe() {
         return getInstanceInner(true);
     }
 
     private static ConnectionSql getInstanceInner(boolean withSleep) {
-        synchronized (ConnectionSql.class) {
-            if (instance == null) {
-                instance = new ConnectionSql();
-                if (withSleep) {
-                    ThreadUtils.sleepThreadInSeconds(3);
-                }
-                instance.uuid = UUID.randomUUID().toString();
-                ConsoleUtils.printToConsole(ThreadUtils.getCurrentThreadName() + StringUtils.TAB + StringUtils.TAB +
-                        "uuid - " + instance.uuid);
+        if (instance == null) {
+            if (withSleep) {
+                ThreadUtils.sleepThreadInSeconds(RandomUtils.randomFromTo(1, 5));
             }
-            return instance;
+            instance = new ConnectionSql();
+            instance.uuid = UUID.randomUUID().toString();
+            final String message = LocalDateTime.now() + StringUtils.TAB +
+                    ThreadUtils.getCurrentThreadName() + StringUtils.TAB + StringUtils.TAB +
+                    "uuid - " + instance.uuid;
+            ConsoleUtils.printToConsole(message);
         }
+        return instance;
     }
 
     public Connection getConnection() {
