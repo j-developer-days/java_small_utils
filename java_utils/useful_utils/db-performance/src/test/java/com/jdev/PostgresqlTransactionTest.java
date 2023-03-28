@@ -14,7 +14,7 @@ import java.sql.Statement;
  */
 public class PostgresqlTransactionTest {
 
-    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+    private static ConnectionSql connectionSql = ConnectionSql.getInstanceThreadSafe();
 
     @BeforeEach
     @AfterEach

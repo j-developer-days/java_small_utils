@@ -17,7 +17,7 @@ import java.sql.Statement;
  */
 public class PostgresqlTransactionWithSavepointTest {
 
-    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+    private static ConnectionSql connectionSql = ConnectionSql.getInstanceThreadSafe();
 
     @BeforeEach
     @AfterEach

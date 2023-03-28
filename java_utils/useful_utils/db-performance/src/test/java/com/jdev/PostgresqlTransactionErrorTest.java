@@ -15,7 +15,7 @@ import java.sql.Statement;
  */
 public class PostgresqlTransactionErrorTest {
 
-    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+    private static ConnectionSql connectionSql = ConnectionSql.getInstanceThreadSafe();
 
     /**
      * show how to work try with resources

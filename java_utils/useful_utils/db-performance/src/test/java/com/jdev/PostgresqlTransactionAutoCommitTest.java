@@ -12,7 +12,7 @@ import java.sql.Statement;
 
 public class PostgresqlTransactionAutoCommitTest {
 
-    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+    private static ConnectionSql connectionSql = ConnectionSql.getInstanceThreadSafe();
 
     static void getCount(Statement statement, int expected) throws SQLException {
         final ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM t_users_pk_int");

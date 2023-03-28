@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 class GenerateInsertSqlTest {
 
-    private static ConnectionSql connectionSql = ConnectionSql.getInstance();
+    private static ConnectionSql connectionSql = ConnectionSql.getInstanceThreadSafe();
 
     @BeforeEach
     private void beforeEach() {

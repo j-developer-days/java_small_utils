@@ -23,7 +23,7 @@ class ConnectionSqlTest {
     private void printAllData() {
         ConsoleUtils.printDelimiter();
         ConsoleUtils.printToConsole("Begin print data ... ");
-        ConnectionSql connectionSql = ConnectionSql.getInstance();
+        ConnectionSql connectionSql = ConnectionSql.getInstanceThreadSafe();
         try (Connection connection = connectionSql.getConnection();) {
             connection.setReadOnly(true);
             Statement statement = connection.createStatement();
@@ -43,7 +43,7 @@ class ConnectionSqlTest {
     private void forDelete() {
         ConsoleUtils.printDelimiter();
         ConsoleUtils.printToConsole("Begin delete data ... ");
-        ConnectionSql connectionSql = ConnectionSql.getInstance();
+        ConnectionSql connectionSql = ConnectionSql.getInstanceThreadSafe();
         try (Connection connection = connectionSql.getConnection();) {
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
@@ -91,7 +91,7 @@ class ConnectionSqlTest {
     @Test
     void test_Runnable() {
         Runnable runnable = () -> {
-            ConnectionSql connectionSql = ConnectionSql.getInstanceWithSleep();
+            ConnectionSql connectionSql = ConnectionSql.getInstanceWithSleepThreadSafe();
             try (Connection connection = connectionSql.getConnection()) {
                 connection.setAutoCommit(false);
                 Statement statement = connection.createStatement();
@@ -155,7 +155,7 @@ class ConnectionSqlTest {
     }
 
     private void createConnectionToSql(int number) throws SQLException {
-        ConnectionSql connectionSql = ConnectionSql.getInstanceWithSleep();
+        ConnectionSql connectionSql = ConnectionSql.getInstanceWithSleepThreadSafe();
         Connection connection = connectionSql.getConnection();
         ConsoleUtils.printToConsole(ThreadUtils.getCurrentThreadName() + "\tconnectionSql" + (number == -1 ?
                 StringUtils.EMPTY : number) + ".getUuid() = "
@@ -177,7 +177,7 @@ class ConnectionSqlTest {
 
         @Override
         public void run() {
-            ConnectionSql connectionSql = ConnectionSql.getInstanceWithSleep();
+            ConnectionSql connectionSql = ConnectionSql.getInstanceWithSleepThreadSafe();
             try (Connection connection = connectionSql.getConnection()) {
                 connection.setAutoCommit(false);
                 Statement statement = connection.createStatement();
