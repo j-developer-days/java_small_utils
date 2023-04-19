@@ -22,7 +22,7 @@ public class GenerateInsertSql {
     {
         StringBuilder query =
                 new StringBuilder(INSERT_INTO).append(StringUtils.SPACE).append(tableName).append(" (").append(
-                        columnDetails.stream().map(columnDetailsLocal -> columnDetailsLocal.getColumnName()).collect(
+                        columnDetails.stream().map(ColumnDetails::getColumnName).collect(
                                 Collectors.joining(", "))).append(")").append(StringUtils.SPACE).append(VALUES).append(StringUtils.SPACE);
         addValues(query, columnDetails, count, isDifferentInsertInto, isDifferentInsertInto ? query.toString() : null);
         return query.toString();

@@ -5,12 +5,11 @@
     <parent>
         <groupId>com.jdev</groupId>
         <artifactId>java_utils</artifactId>
-        <version>${java_utils.version}</version>
+        <version>2-12.01.2023</version>
     </parent>
 
-    <groupId>com.jdev</groupId>
     <artifactId>useful_utils</artifactId>
-    <version>${useful_utils.version}</version>
+    <version>2-12.01.2023</version>
     <packaging>pom</packaging>
 
     <name>useful_utils</name>
@@ -22,10 +21,9 @@
     </modules>
 
     <properties>
-        <useful_utils.version>2-12.01.2023</useful_utils.version>
     </properties>
 
-    <dependencies></dependencies>
+    <dependencies/>
 
     <build>
         <finalName>useful_utils</finalName>

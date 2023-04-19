@@ -3,6 +3,7 @@ package com.jdev;
 import com.jdev.console.ConsoleUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -27,8 +28,9 @@ public class PostgresqlTransactionAutoCommitTest {
         }
     }
 
+    @BeforeEach
     @AfterEach
-    private void afterEach_forDelete() {
+    private void before_And_afterEach_forDelete() {
         try (Connection connection = connectionSql.getConnection();) {
             Statement statement = connection.createStatement();
             ConsoleUtils.printToConsole("deleted - " + statement.executeUpdate("DELETE FROM t_users_pk_int;"));

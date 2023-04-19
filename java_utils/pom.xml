@@ -8,9 +8,8 @@
         <version>1.1-27.12.2022</version>
     </parent>
 
-    <groupId>com.jdev</groupId>
     <artifactId>java_utils</artifactId>
-    <version>${java_utils.version}</version>
+    <version>2-12.01.2023</version>
     <packaging>pom</packaging>
 
     <name>java_utils(root)</name>
@@ -20,11 +19,9 @@
         <module>useful_utils</module>
     </modules>
 
-    <properties>
-        <java_utils.version>2-12.01.2023</java_utils.version>
-    </properties>
+    <properties/>
 
-    <dependencies></dependencies>
+    <dependencies/>
 
     <build>
         <finalName>java_utils</finalName>
