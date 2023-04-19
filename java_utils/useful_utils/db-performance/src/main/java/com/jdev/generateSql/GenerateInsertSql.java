@@ -4,33 +4,30 @@ import com.github.javafaker.Faker;
 import com.jdev.util.StringUtils;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GenerateInsertSql {
 
-    private static final String INSERT_INTO = "INSERT INTO";
-    private static final String VALUES = "VALUES";
-
     public static final Faker FAKER = new Faker();
+    public static final Random RANDOM = new Random();
 
     public static String simpleGeneratorInsertIntoSql(String tableName, List<ColumnDetails> columnDetails, int count) {
         return simpleGeneratorInsertIntoSql(tableName, columnDetails, count, false);
     }
 
     public static String simpleGeneratorInsertIntoSql(String tableName, List<ColumnDetails> columnDetails, int count,
-                                                      boolean isDifferentInsertInto)
-    {
+                                                      boolean isDifferentInsertInto) {
         StringBuilder query =
-                new StringBuilder(INSERT_INTO).append(StringUtils.SPACE).append(tableName).append(" (").append(
+                new StringBuilder(GenerateSqlQuery.INSERT_INTO).append(StringUtils.SPACE).append(tableName).append(" (").append(
                         columnDetails.stream().map(ColumnDetails::getColumnName).collect(
-                                Collectors.joining(", "))).append(")").append(StringUtils.SPACE).append(VALUES).append(StringUtils.SPACE);
+                                Collectors.joining(", "))).append(")").append(StringUtils.SPACE).append(GenerateSqlQuery.VALUES).append(StringUtils.SPACE);
         addValues(query, columnDetails, count, isDifferentInsertInto, isDifferentInsertInto ? query.toString() : null);
         return query.toString();
     }
 
     private static void addValues(StringBuilder query, List<ColumnDetails> columnDetails, int count,
-                                  boolean isDifferentInsertInto, String queryInsertInto)
-    {
+                                  boolean isDifferentInsertInto, String queryInsertInto) {
         for (var i = 1; i <= count; i++) {
             if (isDifferentInsertInto && i != 1) {
                 query.append(queryInsertInto);

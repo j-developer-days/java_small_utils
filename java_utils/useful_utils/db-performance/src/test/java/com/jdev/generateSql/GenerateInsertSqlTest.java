@@ -7,9 +7,12 @@ import com.jdev.console.ConsoleUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 class GenerateInsertSqlTest {
 
@@ -19,10 +22,14 @@ class GenerateInsertSqlTest {
     private void beforeEach() {
         try (Connection connection = connectionSql.getConnection()) {
             connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM t_users_pk_int");
-            int count = preparedStatement.executeUpdate();
-            connection.commit();
-            ConsoleUtils.printToConsole("deleted - " + count);
+            PreparedStatement preparedStatement;
+            int count;
+            for (String tableName : List.of("t_users_pk_int", "t_user_numbers")) {
+                preparedStatement = connection.prepareStatement(GenerateSqlQuery.getDeleteFrom(tableName));
+                count = preparedStatement.executeUpdate();
+                connection.commit();
+                ConsoleUtils.printToConsole(tableName + " - deleted - " + count);
+            }
         } catch (SQLException e) {
             ConsoleUtils.logError("db connection", e);
         }
@@ -73,6 +80,62 @@ class GenerateInsertSqlTest {
         }
 
         Assertions.assertTrue(connectionInner.isClosed());
+    }
+
+    //https://www.postgresql.org/docs/current/datatype-numeric.html
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void test_simpleGeneratorInsertIntoSql_Number_Data_Types(boolean isDifferentInsertInto) throws SQLException {
+        ConsoleUtils.printToConsole("run - test_simpleGeneratorInsertIntoSql_Number_Data_Types - , param = " + isDifferentInsertInto);
+        try (Connection connection = connectionSql.getConnection();) {
+            connection.setAutoCommit(false);
+
+            final String tableName = "t_user_numbers";
+            final int countGenerate = 100;
+            String queryInsert = GenerateInsertSql.simpleGeneratorInsertIntoSql(tableName,
+                    new ArrayList<>() {{
+                        add(ColumnDetails.builder().columnName("age").generateColumnValue(s -> GenerateInsertSql.FAKER.random().nextInt(-32_768, 32_767) + "").build());
+                        add(ColumnDetails.builder().columnName("age_int").generateColumnValue(s -> GenerateInsertSql.FAKER.random().nextInt(-65_768, 65_767) + "").build());
+                        add(ColumnDetails.builder().columnName("big_number").generateColumnValue(s -> GenerateInsertSql.FAKER.random().nextLong() + "").build());
+                        add(ColumnDetails.builder().columnName("price").generateColumnValue(s -> GenerateInsertSql.RANDOM.nextFloat() + "").build());
+                        add(ColumnDetails.builder().columnName("total_price").generateColumnValue(s -> GenerateInsertSql.FAKER.random().nextDouble() + "").build());
+                    }}, countGenerate, isDifferentInsertInto);
+
+            ConsoleUtils.printToConsole(queryInsert);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(queryInsert);
+            int count = preparedStatement.executeUpdate();
+            connection.commit();
+
+            Assertions.assertEquals(isDifferentInsertInto ? 1 : countGenerate, count);
+            Assertions.assertFalse(connection.isReadOnly());
+
+            connection.setReadOnly(true);
+            preparedStatement = connection.prepareStatement(GenerateSqlQuery.getSelectAllFrom(tableName));
+            count = 0;
+            TestHelper.Pair[] pairs = new TestHelper.Pair[]{
+                    new TestHelper.Pair<>("id_small", JDBCType.SMALLINT),
+                    new TestHelper.Pair<>("id", JDBCType.INTEGER),
+                    new TestHelper.Pair<>("id_bigserial", JDBCType.BIGINT),
+                    new TestHelper.Pair<>("age", JDBCType.SMALLINT),
+                    new TestHelper.Pair<>("age_int", JDBCType.INTEGER),
+                    new TestHelper.Pair<>("big_number", JDBCType.BIGINT),
+                    new TestHelper.Pair<>("price", JDBCType.REAL),
+                    new TestHelper.Pair<>("total_price", JDBCType.DOUBLE)
+            };
+            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                while (resultSet.next()) {
+                    TestHelper.printSelectQuery(resultSet, pairs);
+                    count++;
+                }
+            }
+
+            SqlHelper.closeStatement(preparedStatement);
+
+            Assertions.assertEquals(countGenerate, count);
+            Assertions.assertFalse(connection.isClosed());
+            Assertions.assertTrue(connection.isReadOnly());
+        }
     }
 
     @Test
