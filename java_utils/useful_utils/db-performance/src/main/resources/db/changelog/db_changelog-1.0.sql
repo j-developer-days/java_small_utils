@@ -44,3 +44,25 @@ CREATE TABLE IF NOT EXISTS t_user_numbers(
 
 	CONSTRAINT t_user_numbers__id__pk PRIMARY KEY(id)
 ) TABLESPACE db_performance_ts;
+
+--changeset jdev:6
+--comment: create new table t_type_money
+--rollback DROP TABLE IF EXISTS t_type_money CASCADE;
+CREATE TABLE IF NOT EXISTS t_type_money(
+	id SMALLSERIAL NOT NULL,
+	total_amount MONEY NOT NULL,
+
+	CONSTRAINT t_type_money__id__pk PRIMARY KEY(id)
+) TABLESPACE db_performance_ts;
+
+--changeset jdev:7
+--comment: create new table t_type_text
+--rollback DROP TABLE IF EXISTS t_type_text CASCADE;
+CREATE TABLE IF NOT EXISTS t_type_text(
+	id SMALLSERIAL NOT NULL,
+	type VARCHAR(10) NOT NULL,
+	gender char(1) NOT NULL,
+	description text NOT NULL,
+
+	CONSTRAINT t_type_text__id__pk PRIMARY KEY(id)
+) TABLESPACE db_performance_ts;

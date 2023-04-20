@@ -24,7 +24,7 @@ class GenerateInsertSqlTest {
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement;
             int count;
-            for (String tableName : List.of("t_users_pk_int", "t_user_numbers")) {
+            for (String tableName : List.of("t_users_pk_int", "t_user_numbers", "t_type_money", "t_type_text")) {
                 preparedStatement = connection.prepareStatement(GenerateSqlQuery.getDeleteFrom(tableName));
                 count = preparedStatement.executeUpdate();
                 connection.commit();
@@ -123,6 +123,115 @@ class GenerateInsertSqlTest {
                     new TestHelper.Pair<>("price", JDBCType.REAL),
                     new TestHelper.Pair<>("total_price", JDBCType.DOUBLE)
             };
+            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                while (resultSet.next()) {
+                    TestHelper.printSelectQuery(resultSet, pairs);
+                    count++;
+                }
+            }
+
+            SqlHelper.closeStatement(preparedStatement);
+
+            Assertions.assertEquals(countGenerate, count);
+            Assertions.assertFalse(connection.isClosed());
+            Assertions.assertTrue(connection.isReadOnly());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void test_moneyTypeAsVarchar(boolean isDifferentInsertInto) throws SQLException {
+        commonFor_test_moneyType(isDifferentInsertInto, new ArrayList<>() {{
+            add(ColumnDetails.builder().addQuotationMark(true).columnName("total_amount")
+                    .generateColumnValue(s -> "$" + (GenerateInsertSql.FAKER.random().nextDouble() + Integer.parseInt(s))).build());
+        }});
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void test_moneyTypeAsNumber(boolean isDifferentInsertInto) throws SQLException {
+        commonFor_test_moneyType(isDifferentInsertInto, List.of(ColumnDetails.builder().columnName("total_amount")
+                .generateColumnValue(s -> (GenerateInsertSql.FAKER.random().nextBoolean() ?
+                        GenerateInsertSql.FAKER.random().nextDouble() : GenerateInsertSql.FAKER.random().nextInt(0,
+                        1_000_000)) + "").build()));
+    }
+
+    private void commonFor_test_moneyType(boolean isDifferentInsertInto, List<ColumnDetails> columnDetails) throws SQLException {
+        ConsoleUtils.printToConsole("run - test_moneyType - , param = " + isDifferentInsertInto);
+        try (Connection connection = connectionSql.getConnection();) {
+            connection.setAutoCommit(false);
+
+            final String tableName = "t_type_money";
+            final int countGenerate = 150;
+            String queryInsert = GenerateInsertSql.simpleGeneratorInsertIntoSql(tableName, columnDetails, countGenerate, isDifferentInsertInto);
+
+            ConsoleUtils.printToConsole(queryInsert);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(queryInsert);
+            int count = preparedStatement.executeUpdate();
+            connection.commit();
+
+            Assertions.assertEquals(isDifferentInsertInto ? 1 : countGenerate, count);
+            Assertions.assertFalse(connection.isReadOnly());
+
+            connection.setReadOnly(true);
+            preparedStatement = connection.prepareStatement(GenerateSqlQuery.getSelectAllFrom(tableName));
+            count = 0;
+            TestHelper.Pair[] pairs = new TestHelper.Pair[]{
+                    new TestHelper.Pair<>("id", JDBCType.SMALLINT),
+                    new TestHelper.Pair<>("total_amount", JDBCType.VARCHAR)
+            };
+            try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                while (resultSet.next()) {
+                    TestHelper.printSelectQuery(resultSet, pairs);
+                    count++;
+                }
+            }
+
+            SqlHelper.closeStatement(preparedStatement);
+
+            Assertions.assertEquals(countGenerate, count);
+            Assertions.assertFalse(connection.isClosed());
+            Assertions.assertTrue(connection.isReadOnly());
+        }
+
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void test_textType(boolean isDifferentInsertInto) throws SQLException {
+        ConsoleUtils.printToConsole("run - test_textType - , param = " + isDifferentInsertInto);
+        try (Connection connection = connectionSql.getConnection();) {
+            connection.setAutoCommit(false);
+
+            final String tableName = "t_type_text";
+            final int countGenerate = 75;
+            String queryInsert = GenerateInsertSql.simpleGeneratorInsertIntoSql(tableName,
+                    List.of(ColumnDetails.builder().addQuotationMark(true).columnName("type").size(10)
+                                    .isChangeSpecialSign(true).generateColumnValue(s -> GenerateInsertSql.FAKER.address().fullAddress() + s).build(),
+                            ColumnDetails.builder().addQuotationMark(true).columnName("gender").size(1)
+                                    .isChangeSpecialSign(true).generateColumnValue(s -> (GenerateInsertSql.FAKER.animal().name())).build(),
+                            ColumnDetails.builder().addQuotationMark(true).columnName("description")
+                                    .isChangeSpecialSign(true).generateColumnValue(s -> (GenerateInsertSql.FAKER.book().author())).build()),
+                    countGenerate, isDifferentInsertInto);
+
+            ConsoleUtils.printToConsole(queryInsert);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(queryInsert);
+            int count = preparedStatement.executeUpdate();
+            connection.commit();
+
+            Assertions.assertEquals(isDifferentInsertInto ? 1 : countGenerate, count);
+            Assertions.assertFalse(connection.isReadOnly());
+
+            connection.setReadOnly(true);
+            preparedStatement = connection.prepareStatement(GenerateSqlQuery.getSelectAllFrom(tableName));
+            count = 0;
+            TestHelper.Pair<String, JDBCType>[] pairs = new TestHelper.Pair[]{
+                    new TestHelper.Pair<>("id", JDBCType.SMALLINT),
+                    new TestHelper.Pair<>("type", JDBCType.VARCHAR),
+                    new TestHelper.Pair<>("gender", JDBCType.VARCHAR),
+                    new TestHelper.Pair<>("description", JDBCType.LONGVARCHAR)};
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 while (resultSet.next()) {
                     TestHelper.printSelectQuery(resultSet, pairs);

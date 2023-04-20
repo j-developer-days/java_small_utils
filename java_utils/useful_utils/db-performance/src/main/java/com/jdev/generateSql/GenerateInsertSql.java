@@ -65,7 +65,14 @@ public class GenerateInsertSql {
     }
 
     private static void addValueForColumn(StringBuilder query, ColumnDetails columnDetailsCurrent, int i) {
-        query.append(columnDetailsCurrent.getGenerateColumnValue().apply(Integer.toString(i)).replaceAll("[/']", "''"));
+        String value = columnDetailsCurrent.getGenerateColumnValue().apply(Integer.toString(i));
+        if (columnDetailsCurrent.isChangeSpecialSign()) {
+            value = value.replaceAll("[']", "''");
+        }
+        if (columnDetailsCurrent.getSize() >= 1 && value.length() > columnDetailsCurrent.getSize()) {
+            value = value.substring(0, columnDetailsCurrent.getSize());
+        }
+        query.append(value);
     }
 
 }

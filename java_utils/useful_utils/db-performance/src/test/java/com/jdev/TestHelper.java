@@ -17,6 +17,7 @@ public class TestHelper {
         for (Pair<String, JDBCType> columnWithType : columnWithTypes) {
             result.append(columnWithType.getKey()).append(" - ");
             switch (columnWithType.getValue()) {
+                case LONGVARCHAR:
                 case VARCHAR: {
                     result.append(resultSet.getString(columnWithType.getKey()));
                     break;

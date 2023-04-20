@@ -14,6 +14,8 @@ public class ColumnDetails {
     private String columnName;
     private JDBCType jdbcType;
     private boolean addQuotationMark;
+    private int size;
+    private boolean isChangeSpecialSign;
     private Function<String, String> generateColumnValue;
 
     private ColumnDetails(String columnName, Function<String, String> generateColumnValue) {
