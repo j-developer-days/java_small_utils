@@ -40,7 +40,7 @@ public class ScreenShooterStarter {
             if (value == null) {
                 consoleInput = getConsoleInput();
             }
-            return Integer.valueOf(consoleInput);
+            return Integer.parseInt(consoleInput);
         } catch (NumberFormatException e) {
             CONSOLE_LOGGER.error("Can't convert to int - {}", e, consoleInput);
             return getConsoleInputConvertToInt(value);

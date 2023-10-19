@@ -29,7 +29,7 @@ public class PasswordGenerator {
         final int lastIndex = characters.size() - 1;
         List<Character> characters = new ArrayList<>(this.characters);
         if (passwordGeneratorLevel == PasswordGeneratorLevel.UUID) {
-            result.append(UUID.randomUUID().toString());
+            result.append(UUID.randomUUID());
 
             CustomFillArray customFillArray = new CustomFillArray();
             customFillArray.setStartValue(8);
