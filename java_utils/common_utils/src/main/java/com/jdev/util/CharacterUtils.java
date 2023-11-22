@@ -13,7 +13,7 @@ public class CharacterUtils {
     private static List<Character> englishAlphabetUpper;
 
     public static List<Character> getListEnglishAlphabet() {
-        List<Character> characters = getListEnglishAlphabetUpper();
+        List<Character> characters = new ArrayList<>(getListEnglishAlphabetUpper());
         characters.addAll(getListEnglishAlphabetLower());
         return characters;
     }
