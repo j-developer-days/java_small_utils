@@ -27,11 +27,13 @@ public class MouseInformation {
 
         Robot robot = new Robot();
         while (true){
-           int x =  RANDOM.nextInt((int)screenSize.getWidth());
-           int y =  RANDOM.nextInt((int)screenSize.getHeight());
+           int x =  (int)screenSize.getWidth();
+           int y =  (int)screenSize.getHeight();
+//           int x =  RANDOM.nextInt((int)screenSize.getWidth());
+//           int y =  RANDOM.nextInt((int)screenSize.getHeight());
 
             System.out.println("X = " + x + "\ty = " + y);
-            robot.mouseMove(x, y);
+//            robot.mouseMove(x, y);
             Color pixelColor = robot.getPixelColor(x, y);
             System.out.println("color is - " + pixelColor);
             robot.delay(4_000);
